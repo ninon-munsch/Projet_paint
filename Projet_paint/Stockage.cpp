@@ -20,7 +20,7 @@ GLvoid draw_points(vector<point> points) {
     }
 }
 
-//Dessine tous les rectangles b
+//Dessine tous les rectangles
 GLvoid draw_rectangles(vector<rectangle> rectangles) {
 
     for (rectangle r : rectangles) {
@@ -32,6 +32,25 @@ GLvoid draw_rectangles(vector<rectangle> rectangles) {
         if (r.epaisseur != 0) {
             glColor4f(1, 1, 1, 0);
             glRectf(r.hg.x + r.epaisseur, r.hg.y + r.epaisseur, r.bd.x - r.epaisseur, r.bd.y - r.epaisseur);
+        }
+        glEnd();
+    }
+};
+
+//Dessine tous les cercles
+GLvoid draw_circles(vector<cercle> cercles) {
+
+    for (cercle c : cercles) {
+        glMatrixMode(GL_MODELVIEW);
+        glColor4f(c.c.r, c.c.g, c.c.b, c.c.a);
+        GLUquadric *obj;
+        obj = gluNewQuadric();
+        glTranslatef(c.o.x, c.o.y,0);
+        if (c.epaisseur != 0) {
+            gluDisk(obj, 0, c.r, 0, 0);
+        }
+        else {
+            gluDisk(obj, c.r - c.epaisseur, c.r, 0, 0);
         }
         glEnd();
     }
