@@ -114,12 +114,31 @@ GLvoid clavier(unsigned char touche, int x, int y) {
 
 // Fonction de rappel de la souris
 GLvoid souris(int bouton, int etat, int x, int y) {
-    
+
+    //test en cas de clic sur une icone couleur
+    if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) 
+    {
+        for (int i = 0; i < ico_coul.size(); i++)
+        {
+            if (ico_coul[i].est_sur(x, y))
+            {
+                c = ico_coul[i].getC();
+            }
+        }
+    }
     if (zonedessin(y)) {
         // Test pour voir si le bouton gauche de la souris est appuyé, pour commencer à dessiner
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
             boutonClick = true;
-
+            for (int i = 0; i < ico_coul.size(); i++) 
+            {
+                cout << "a";
+                if (ico_coul[i].est_sur(x, y)) 
+                {
+                    cout << "a";
+                    c = ico_coul[i].getC();
+                }
+            }
             x_draw = x;
             y_draw = y;
         }
