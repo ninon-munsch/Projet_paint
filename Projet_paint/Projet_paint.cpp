@@ -10,11 +10,10 @@ using namespace std;
 
 GLboolean boutonClick = false;
 double x_draw, y_draw;
-
+vector<Icone> ico_coul=create_icons();      //vecteur des icones de couleurs
 //Initialisation des vecteurs de stockage
 vector<point> points;
 vector<rectangle> rectangles;
-
 // Taille de la fenêtre
 int windowW = 1500;
 int windowH = 900;
@@ -23,7 +22,7 @@ float nearW = 0.1f;
 float farW = 100.0f;
 
 //Caraxtéristiques graphiques
-couleur c;
+couleur c; // couleur a modifier
 float taille;
 
 // Déclarations des fonctions de rappel (callbacks)
@@ -76,7 +75,7 @@ GLvoid affichage() {
     //Dessin des formes
     draw_points(points);
     draw_rectangles(rectangles);
-
+    draw_colors(ico_coul);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
 }
@@ -90,7 +89,7 @@ GLvoid clavier(unsigned char touche, int x, int y) {
 
 // Fonction de rappel de la souris
 GLvoid souris(int bouton, int etat, int x, int y) {
-
+    
     if (zonedessin(y)) {
         // Test pour voir si le bouton gauche de la souris est appuyé, pour commencer à dessiner
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
@@ -166,10 +165,10 @@ GLvoid test() {
     c.b = 0;
     taille = 7;
     rectangle r;
-    r.hg.x = 200;
-    r.hg.y = 200;
-    r.bd.x = 600;
-    r.bd.y = 600;
+    r.hg.x = 10;
+    r.hg.y = 10;
+    r.bd.x = 50;
+    r.bd.y = 50;
     r.c = c;
     r.epaisseur = 0;
     rectangles.push_back(r);
@@ -177,10 +176,10 @@ GLvoid test() {
 
 int main(int argc, char** argv)
 {
-
+    //create_icons();
     //Fonction test
-    test();
-
+    //test();
+    
     // Initialisation de GLUT
     glutInit(&argc, argv);
     // Choix du mode d'affichage (ici RVB)
