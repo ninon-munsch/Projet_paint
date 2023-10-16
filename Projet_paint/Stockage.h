@@ -14,7 +14,7 @@ typedef struct {
     float a;
 } couleur;
 
-//Stockage des données à dessiner
+//Stockage des données à dessiner b
 typedef struct {
     float x;
     float y;

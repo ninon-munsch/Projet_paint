@@ -6,6 +6,7 @@
 #include<GLUT.H>
 using namespace std;
 
+
 class Icone {
 	int coin_hg;
 	int coin_bd;

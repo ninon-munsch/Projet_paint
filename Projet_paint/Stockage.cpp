@@ -20,7 +20,7 @@ GLvoid draw_points(vector<point> points) {
     }
 }
 
-//Dessine tous les rectangles
+//Dessine tous les rectangles b
 GLvoid draw_rectangles(vector<rectangle> rectangles) {
 
     for (rectangle& r : rectangles) {
