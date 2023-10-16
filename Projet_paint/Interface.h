@@ -11,11 +11,17 @@ using namespace std;
 class Icone {
 	point coin_hg;
 	point coin_bd;
+	couleur c;
+	vector<point> forme;
 public:
 	GLboolean est_sur(int x, int y);
-	Icone(int hg, int bd);
+	Icone(point hg, point bd);
+	Icone(point hg, point bd,couleur co);
 	point getHG() { return coin_hg; };
 	point getBD() { return coin_bd; };
+	couleur getC() { return c; };
+
 };
 
-GLvoid create_icons();
+vector<Icone> create_icons();
+GLvoid draw_colors(vector<Icone> ico);
