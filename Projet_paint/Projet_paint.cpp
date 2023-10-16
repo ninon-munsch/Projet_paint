@@ -130,15 +130,7 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         // Test pour voir si le bouton gauche de la souris est appuyé, pour commencer à dessiner
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
             boutonClick = true;
-            for (int i = 0; i < ico_coul.size(); i++) 
-            {
-                cout << "a";
-                if (ico_coul[i].est_sur(x, y)) 
-                {
-                    cout << "a";
-                    c = ico_coul[i].getC();
-                }
-            }
+
             x_draw = x;
             y_draw = y;
         }
