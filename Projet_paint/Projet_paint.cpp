@@ -12,15 +12,17 @@ GLboolean boutonClick = false;
 double x_draw, y_draw;
 vector<Icone> ico_coul=create_icons();      //vecteur des icones de couleurs
 
-//Mode de dessin. O = pinceau, 1 = rectangle.
+//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
 int mode = 1;
 
 //Initialisation des vecteurs de stockage
 vector<point> points;
 vector<rectangle> rectangles;
+vector<cercle> cercles;
 
-// Variable temporaire pour dessiner les rectangles
+// Variable temporaire pour dessiner les formes
 rectangle r;
+cercle ce;
 
 // Taille de la fenêtre
 int windowW = 1500;
@@ -92,6 +94,14 @@ GLvoid affichage() {
             r.hg = p;
         }
     break;
+    case 2:
+        if (boutonClick == true) {
+            point p;
+            p.x = x_draw;
+            p.y = y_draw;
+            ce.c = c;
+            ce.o = p;
+        }
     }
 
     //Dessin à la souris
