@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Interface.cpp" />
     <ClCompile Include="Stockage.cpp" />
     <ClCompile Include="Projet_paint.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

@@ -13,6 +13,7 @@ double x_draw, y_draw;
 
 //Initialisation des vecteurs de stockage
 vector<point> points;
+vector<rectangle> rectangles;
 
 // Taille de la fenêtre
 int windowW = 1500;
@@ -72,8 +73,9 @@ GLvoid affichage() {
         points.push_back(p);
     }
 
-    //Dessin des points
+    //Dessin des formes
     draw_points(points);
+    draw_rectangles(rectangles);
 
     // Forcer l‘affichage d‘OpenGL
     glFlush();
@@ -163,6 +165,14 @@ GLvoid test() {
     c.g = 0;
     c.b = 0;
     taille = 7;
+    rectangle r;
+    r.hg.x = 200;
+    r.hg.y = 200;
+    r.bd.x = 600;
+    r.bd.y = 600;
+    r.c = c;
+    r.epaisseur = 0;
+    rectangles.push_back(r);
 }
 
 int main(int argc, char** argv)

@@ -23,7 +23,7 @@ GLvoid draw_points(vector<point> points) {
 //Dessine tous les rectangles b
 GLvoid draw_rectangles(vector<rectangle> rectangles) {
 
-    for (rectangle& r : rectangles) {
+    for (rectangle r : rectangles) {
         glMatrixMode(GL_MODELVIEW);
         glColor4f(r.c.r, r.c.g, r.c.b, r.c.a);
         glRectf(r.hg.x, r.hg.y, r.bd.x, r.bd.y);
