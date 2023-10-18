@@ -10,8 +10,8 @@ using namespace std;
 
 GLboolean boutonClick = false;
 double x_draw, y_draw;
-vector<Icone> ico_coul=create_icons();      //vecteur des icones de couleurs
-
+vector<Icone> ico_coul=create_icons_coul();      //vecteur des icones de couleurs
+vector<Icone> ico_forme = create_icons_forme();
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
 int mode = 1;
 
@@ -42,11 +42,11 @@ GLvoid souris(int bouton, int etat, int x, int y);
 GLvoid deplacementSouris(int x, int y);
 GLvoid redimensionner(int w, int h);
 
-//Zone debut dessin y=100
+//Zone debut dessin y=120
 
 GLboolean zonedessin(int y)
 {
-    return y > 100;
+    return y > 120;
 }
 
 // Définition de la fonction d'affichage
@@ -111,6 +111,7 @@ GLvoid affichage() {
     draw_points(points);
     draw_rectangles(rectangles);
     draw_colors(ico_coul);
+    draw_colors(ico_forme);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
 }
@@ -133,6 +134,13 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             if (ico_coul[i].est_sur(x, y))
             {
                 c = ico_coul[i].getC();
+            }
+        }
+        for (int i = 0; i < ico_forme.size(); i++)
+        {
+            if (ico_forme[i].est_sur(x, y))
+            {
+                mode = ico_forme[i].getM();
             }
         }
     }

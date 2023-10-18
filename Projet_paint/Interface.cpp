@@ -21,6 +21,14 @@ Icone::Icone(point hg, point bd, couleur co)
 	this->c = co;
 }
 
+Icone::Icone(point hg, point bd, couleur co, int m)
+{
+	this->coin_hg = hg;
+	this->coin_bd = bd;
+	this->c = co;
+	this->m = m;
+}
+
 
 GLboolean Icone::est_sur(int x, int y)
 {	
@@ -43,7 +51,7 @@ GLboolean Icone::est_sur(int x, int y)
 }
 
 //creer les icones de différentes couleurs
-vector<Icone> create_icons() {
+vector<Icone> create_icons_coul() {
 	//Icône rectangle
 	//point i_rect_hg;
 	//i_rect_hg.x = 10;
@@ -94,6 +102,49 @@ vector<Icone> create_icons() {
 	return res;
 }
 
+
+	vector<Icone> create_icons_forme() {
+		//FOND COULEUR
+		couleur fond;
+		fond.r = 0;
+		fond.g = 0;
+		fond.b = 1;
+		fond.a = 0;
+		vector<Icone> res;
+		//CRAYON CLASSIQUE
+		point hgcra;
+		point bdcra;
+		int mcra = 0;
+		hgcra.x = 10;
+		hgcra.y = 60;
+		bdcra.x = 50;
+		bdcra.y = 100;
+		Icone cra(hgcra, bdcra, fond,mcra);
+		//CARRE
+		point hgca;
+		point bdca;
+		int mca = 1;
+		hgca.x = 60;
+		hgca.y = 60;
+		bdca.x = 100;
+		bdca.y = 100;
+		Icone ca(hgca, bdca, fond,mca);
+		//CERCLE
+		int mce = 2;
+		point hgce;
+		point bdce;
+		hgce.x = 110;
+		hgce.y = 60;
+		bdce.x = 150;
+		bdce.y = 100;
+		Icone ce(hgce, bdce, fond,mce);
+		res.push_back(cra);
+		res.push_back(ca);
+		res.push_back(ce);
+		return res;
+}
+
+
 GLvoid draw_colors(vector<Icone> ico) {
 
 	for (Icone& i : ico) {
@@ -106,4 +157,18 @@ GLvoid draw_colors(vector<Icone> ico) {
 
 		glEnd();
 	}
-};
+}
+
+//GLvoid draw_colors(vector<Icone> ico) {
+//
+//	for (Icone& i : ico) {
+//		couleur c = i.getC();
+//		point hg = i.getHG();
+//		point bd = i.getBD();
+//		glMatrixMode(GL_MODELVIEW);
+//		glColor4f(c.r, c.g, c.b, c.a);
+//		glRectf(hg.x, hg.y, bd.x, bd.y);
+//
+//		glEnd();
+//	}
+//};
