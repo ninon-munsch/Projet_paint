@@ -7,6 +7,12 @@
 #include<GLUT.H>
 using namespace std;
 
+point npoint(int x, int y) {
+	point p;
+	p.x = x;
+	p.y = y;
+	return p;
+}
 
 Icone::Icone(point hg, point bd)
 {
@@ -19,6 +25,23 @@ Icone::Icone(point hg, point bd, couleur co)
 	this->coin_hg = hg;
 	this->coin_bd = bd;
 	this->c = co;
+}
+
+Icone::Icone(point hg, point bd, couleur co, int m)
+{
+	this->coin_hg = hg;
+	this->coin_bd = bd;
+	this->c = co;
+	this->m = m;
+}
+
+Icone::Icone(point hg, point bd, couleur co, int m,vector<point> forme)
+{
+	this->coin_hg = hg;
+	this->coin_bd = bd;
+	this->c = co;
+	this->m = m;
+	this->forme = forme;
 }
 
 
@@ -43,14 +66,7 @@ GLboolean Icone::est_sur(int x, int y)
 }
 
 //creer les icones de différentes couleurs
-vector<Icone> create_icons() {
-	//Icône rectangle
-	//point i_rect_hg;
-	//i_rect_hg.x = 10;
-	//i_rect_hg.y = 10;
-	//point i_rect_bd;
-	//i_rect_bd.x = 150;
-	//i_rect_bd.y = 150;
+vector<Icone> create_icons_coul() {
 	vector<Icone> res;
 	couleur rouge;
 	point hgr;
@@ -94,6 +110,69 @@ vector<Icone> create_icons() {
 	return res;
 }
 
+
+	vector<Icone> create_icons_forme() {
+		//FOND COULEUR
+		couleur fond;
+		fond.r = 0;
+		fond.g = 0;
+		fond.b = 0;
+		fond.a = 0;
+		vector<Icone> res;
+		//CRAYON CLASSIQUE
+		point hgcra;
+		point bdcra;
+		int mcra = 0;
+		hgcra.x = 10;
+		hgcra.y = 60;
+		bdcra.x = 50;
+		bdcra.y = 100;
+		vector<point> forme = { npoint(10 + 15,60 + 32),npoint(10 + 10,60 + 25),npoint(10 + 20,60 + 20),npoint(10 + 30,60 + 15),npoint(10 + 25,60 + 7) };
+		Icone cra(hgcra, bdcra, fond,mcra,forme);
+		//CARRE
+		point hgca;
+		point bdca;
+		int mca = 1;
+		hgca.x = 60;
+		hgca.y = 60;
+		bdca.x = 100;
+		bdca.y = 100;
+		vector<point> formeca = { npoint(hgca.x+10,hgca.y+10),npoint(hgca.x+30,hgca.y+10),npoint(hgca.x+30,hgca.y+30),npoint(hgca.x+10,hgca.y+30),npoint(hgca.x + 10,hgca.y + 10)};
+		Icone ca(hgca, bdca, fond, mca, formeca);
+		//CERCLE
+		int mce = 2;
+		point hgce;
+		point bdce;
+		hgce.x = 110;
+		hgce.y = 60;
+		bdce.x = 150;
+		bdce.y = 100;
+		vector<point> formece;
+		float angle = (2 * 3.14 )/ 32;
+		for (int i = 0; i < 32; i++) {
+			formece.push_back(npoint(hgce.x+20+10 * cos(i * angle), hgce.y+20+10 * sin(i * angle)));
+		}
+		formece.push_back(npoint(hgce.x + 20 + 10 * cos(0 * angle), hgce.y + 20 + 10 * sin(0 * angle)));
+		Icone ce(hgce, bdce, fond,mce,formece);
+		//TRIANGLE
+		int mtr = 3;
+		point hgtr;
+		point bdtr;
+		hgtr.x = 160;
+		hgtr.y = 60;
+		bdtr.x = 200;
+		bdtr.y = 100;
+		vector<point> formetr = { npoint(hgtr.x + 20,hgtr.y + 10),npoint(hgtr.x + 30,hgtr.y + 30),npoint(hgtr.x + 10,hgtr.y + 30),npoint(hgtr.x + 20,hgtr.y + 10) };
+		Icone tr(hgtr, bdtr, fond, mtr, formetr);
+		//LISTE D'ICONES
+		res.push_back(cra);
+		res.push_back(ca);
+		res.push_back(ce);
+		res.push_back(tr);
+		return res;
+}
+
+
 GLvoid draw_colors(vector<Icone> ico) {
 
 	for (Icone& i : ico) {
@@ -103,6 +182,26 @@ GLvoid draw_colors(vector<Icone> ico) {
 		glMatrixMode(GL_MODELVIEW);
 		glColor4f(c.r, c.g, c.b, c.a);
 		glRectf(hg.x, hg.y, bd.x, bd.y);
+
+		glEnd();
+	}
+}
+
+GLvoid draw_forme(vector<Icone> ico) {
+
+	for (Icone& i : ico) {
+		couleur c = i.getC();
+		point hg = i.getHG();
+		point bd = i.getBD();
+		glMatrixMode(GL_MODELVIEW);
+		glColor4f(c.r, c.g, c.b, c.a);
+		glRectf(hg.x, hg.y, bd.x, bd.y);
+		glColor4f(255, 255, 255, 0);
+		glBegin(GL_LINE_STRIP);
+		for (point p : i.getForme()) {
+			glVertex2f(p.x, p.y);
+		}
+
 
 		glEnd();
 	}
