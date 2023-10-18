@@ -42,11 +42,11 @@ GLvoid souris(int bouton, int etat, int x, int y);
 GLvoid deplacementSouris(int x, int y);
 GLvoid redimensionner(int w, int h);
 
-//Zone debut dessin y=120
+//Zone debut dessin y=110
 
 GLboolean zonedessin(int y)
 {
-    return y > 120;
+    return y > 110;
 }
 
 // Définition de la fonction d'affichage
@@ -110,8 +110,10 @@ GLvoid affichage() {
     //Dessin des formes
     draw_points(points);
     draw_rectangles(rectangles);
+
+    //Dessin des icônes
     draw_colors(ico_coul);
-    draw_colors(ico_forme);
+    draw_forme(ico_forme);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
 }
