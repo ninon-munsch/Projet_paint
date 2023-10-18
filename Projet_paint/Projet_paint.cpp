@@ -14,7 +14,7 @@ vector<Icone> ico_coul=create_icons();      //vecteur des icones de couleurs
 
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
 int mode = 3;
-
+bool supp = false;
 //Initialisation des vecteurs de stockage
 vector<point> points;
 vector<rectangle> rectangles;
@@ -113,10 +113,18 @@ GLvoid affichage() {
             
         }
     }
-
+    if (supp) 
+    {
+        points.clear();
+        rectangles.clear();
+        cercles.clear();
+        triangles.clear();
+        supp = false;
+    }
     //Dessin à la souris
     
     //Dessin des icônes
+
     draw_colors(ico_coul);
      
     //Dessin des formes
