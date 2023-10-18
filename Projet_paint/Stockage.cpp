@@ -6,6 +6,7 @@
 #include<gl/GL.h>
 #include<GLUT.H>
 using namespace std;
+float ylim = 110;
 
 //Dessine tous les points
 GLvoid draw_points(vector<point> points) {
@@ -41,17 +42,35 @@ GLvoid draw_rectangles(vector<rectangle> rectangles) {
 GLvoid draw_circles(vector<cercle> cercles) {
 
     for (cercle c : cercles) {
-        glMatrixMode(GL_MODELVIEW);
-        glColor4f(c.c.r, c.c.g, c.c.b, c.c.a);
-        GLUquadric *obj;
-        obj = gluNewQuadric();
-        glTranslatef(c.o.x, c.o.y,0);
-        if (c.epaisseur != 0) {
-            gluDisk(obj, 0, c.r, 0, 0);
+        if ((c.o.y - c.r) > ylim) {
+            glMatrixMode(GL_MODELVIEW);
+            int nbreSeg = 10000; //nombre de segments définissant notre cercle
+            float pi = 3.14159f;
+            float theta = 2 * pi / nbreSeg;
+            glBegin(GL_LINES);
+            glColor4f(c.c.r, c.c.g, c.c.b, c.c.a);
+            for (int i = 0; i < nbreSeg; i++) {
+                glVertex3f(c.o.x + c.r * cos(i * theta), c.o.y + c.r * sin(i * theta), 0);
+                glVertex3f(c.o.x - c.r * cos(i * theta), c.o.y + c.r * sin(i * theta), 0);
+            }
+            glEnd();
         }
-        else {
-            gluDisk(obj, c.r - c.epaisseur, c.r, 0, 0);
-        }
-        glEnd();
+        
     }
+};
+GLvoid draw_triangles(vector<triangle> triangles)
+{
+for (triangle& t : triangles) {
+    glMatrixMode(GL_MODELVIEW);
+    glBegin(GL_TRIANGLES);
+    glColor4f(t.c.r, t.c.g, t.c.b, t.c.a);
+    glVertex2f(t.so.x, t.so.y);
+    glVertex2f(t.ba.x, t.ba.y);
+    glVertex2f(2*t.so.x- t.ba.x, t.ba.y);
+    //if (t.epaisseur != 0) {
+    //    glColor4f(1, 1, 1, 0);
+    //    glRectf(t.hg.x + t.epaisseur, r.hg.y + r.epaisseur, r.bd.x - r.epaisseur, r.bd.y - r.epaisseur);
+    //}
+    glEnd();
+}
 };

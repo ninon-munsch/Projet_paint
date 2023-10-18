@@ -12,7 +12,7 @@ class Icone {
 	point coin_hg;
 	point coin_bd;
 	couleur c;
-	vector<point> forme;
+	vector<point> forme; //Ensemble de points à tracer dans l'ordre formant le symbole de l'icône
 public:
 	GLboolean est_sur(int x, int y);
 	Icone(point hg, point bd);

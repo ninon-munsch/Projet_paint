@@ -30,6 +30,13 @@ typedef struct {
 } rectangle;
 
 typedef struct {
+    point so;
+    point ba;
+    couleur c;
+    float epaisseur;
+} triangle;
+
+typedef struct {
     point o;
     float r;
     couleur c;
@@ -39,3 +46,4 @@ typedef struct {
 GLvoid draw_points(vector<point> points);
 GLvoid draw_rectangles(vector<rectangle> rectangles);
 GLvoid draw_circles(vector<cercle> cercles);
+GLvoid draw_triangles(vector<triangle> triangles);

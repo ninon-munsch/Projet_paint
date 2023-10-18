@@ -13,17 +13,18 @@ double x_draw, y_draw;
 vector<Icone> ico_coul=create_icons();      //vecteur des icones de couleurs
 
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
-int mode = 1;
+int mode = 3;
 
 //Initialisation des vecteurs de stockage
 vector<point> points;
 vector<rectangle> rectangles;
 vector<cercle> cercles;
+vector<triangle> triangles;
 
 // Variable temporaire pour dessiner les formes
 rectangle r;
 cercle ce;
-
+triangle t;
 // Taille de la fenêtre
 int windowW = 1500;
 int windowH = 900;
@@ -43,7 +44,6 @@ GLvoid deplacementSouris(int x, int y);
 GLvoid redimensionner(int w, int h);
 
 //Zone debut dessin y=100
-
 GLboolean zonedessin(int y)
 {
     return y > 100;
@@ -102,15 +102,28 @@ GLvoid affichage() {
             ce.c = c;
             ce.o = p;
         }
+        break;
+    case 3:
+        if (boutonClick == true) {
+            point p;
+            p.x = x_draw;
+            p.y = y_draw;
+            t.c = c;
+            t.so = p;
+            
+        }
     }
 
     //Dessin à la souris
     
-
+    //Dessin des icônes
+    draw_colors(ico_coul);
+     
     //Dessin des formes
     draw_points(points);
     draw_rectangles(rectangles);
-    draw_colors(ico_coul);
+    draw_circles(cercles);
+    draw_triangles(triangles);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
 }
@@ -158,10 +171,21 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     r.bd.y = y;
                     rectangles.push_back(r);
                 }
-                
-                
                 boutonClick = false;
                 break;
+            case 2:
+                if (boutonClick) {
+                    ce.r = sqrt(pow(x_draw - x, 2) + pow(y_draw - y, 2));
+                    cercles.push_back(ce);
+                }
+                boutonClick = false;
+                break;
+            case 3:
+                if (boutonClick) {
+                    t.ba.x = x;
+                    t.ba.y = y;
+                    triangles.push_back(t);
+                }
             }
         }
     }
@@ -226,25 +250,19 @@ GLvoid redimensionner(int w, int h) {
 }
 
 GLvoid test() {
-    //c.r = 1;
-    //c.g = 0;
-    //c.b = 0;
-    //taille = 7;
-    //rectangle r;
-    //r.hg.x = 200;
-    //r.hg.y = 200;
-    //r.bd.x = 600;
-    //r.bd.y = 600;
-    //r.c = c;
-    //r.epaisseur = 0;
-    //rectangles.push_back(r);
+    //glMatrixMode(GL_MODELVIEW);
+    //glColor4f(0, 0, 0, 0);
+    //GLUquadric* obj;
+    //obj = gluNewQuadric();
+    //glTranslatef(600,600, 0);
+    //gluDisk(obj, 0, 100, 0, 0);
 }
 
 int main(int argc, char** argv)
 {
     //create_icons();
     //Fonction test
-    //test();
+    test();
     
     // Initialisation de GLUT
     glutInit(&argc, argv);
