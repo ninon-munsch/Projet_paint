@@ -75,34 +75,36 @@ GLvoid affichage() {
 
     //Interface
     //create_icons();
- 
-    switch (mode) {
-    case 0:
-        if (boutonClick == true) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-            stockage.push_back(Forme(0, taille, clicks));
-        }
-    break;
-    case 1:
-        if (boutonClick == true && clicks.empty()) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-        }
-    break;
-    case 2:
-        if (boutonClick == true && clicks.empty()) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-        }
-        break;
-    case 3:
-        if (boutonClick == true && clicks.empty()) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-            
+    if (zonedessin(y_draw)) {
+        switch (mode) {
+        case 0:
+            if (boutonClick == true) {
+                clicks.push_back(npoint(x_draw, y_draw));
+                clicks[0].c = c;
+                stockage.push_back(Forme(0, taille, clicks));
+            }
+            break;
+        case 1:
+            if (boutonClick == true && clicks.empty()) {
+                clicks.push_back(npoint(x_draw, y_draw));
+                clicks[0].c = c;
+            }
+            break;
+        case 2:
+            if (boutonClick == true && clicks.empty()) {
+                clicks.push_back(npoint(x_draw, y_draw));
+                clicks[0].c = c;
+            }
+            break;
+        case 3:
+            if (boutonClick == true && clicks.empty()) {
+                clicks.push_back(npoint(x_draw, y_draw));
+                clicks[0].c = c;
+
+            }
         }
     }
+
     if (supp) 
     {
         stockage.clear();
@@ -122,6 +124,7 @@ GLvoid affichage() {
     //Dessin des icônes
     draw_colors(ico_coul);
     draw_colors(palette);
+    curseur_palette(c);
     draw_forme(ico_forme);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
@@ -144,11 +147,25 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         {
             if (ico_coul[i].est_sur(x, y))
             {
-                
                 c = ico_coul[i].getC();
             }
         }
-       
+        for (int i = 0; i < palette.size(); i++)
+        {
+            if ((palette[i].est_sur(x, y)) && (i == 0))
+            {
+                c.r = (x - 210.0) / 255.0;
+            }
+            if ((palette[i].est_sur(x, y)) && (i == 1))
+            {
+                c.g = (x - 210.0) / 255.0;
+            }
+
+            if ((palette[i].est_sur(x, y)) && (i == 2))
+            {
+                c.b = (x - 210.0) / 255.0;
+            }
+        }
         for (int i = 0; i < ico_forme.size(); i++)
         {
             if (ico_forme[i].est_sur(x, y))
@@ -157,9 +174,7 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             }
         }
     }
-    if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
-        boutonClick = true;
-    }
+
     if (zonedessin(y))
     {
         // Test pour voir si le bouton gauche de la souris est appuyé, pour commencer à dessiner
@@ -204,8 +219,13 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         else {
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
             boutonClick = true;
+            clicks.clear();
         }
-        else{ boutonClick = false ; }
+        if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_UP)
+        {
+            boutonClick = false ; 
+            clicks.clear();
+        }
         }
 
     
@@ -219,6 +239,9 @@ GLvoid souris(int bouton, int etat, int x, int y) {
 
 GLvoid deplacementSouris(int x, int y) {
     // si le bouton gauche est appuye et qu'on se deplace, on veut dessiner des points en continu
+    if (not(zonedessin(y))) {
+        clicks.clear();
+    }
     if (zonedessin(y) && boutonClick) {
         switch (mode) {
         case 0:
@@ -246,7 +269,6 @@ GLvoid deplacementSouris(int x, int y) {
         }
     }
     }
-
     // Appeler le re-affichage de la scene OpenGL
     glFlush();
     glutPostRedisplay();

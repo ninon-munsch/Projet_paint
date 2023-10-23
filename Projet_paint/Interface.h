@@ -35,3 +35,4 @@ GLvoid draw_forme(vector<Icone> ico);
 point npoint(int x, int y);
 vector<Icone> create_slide();
 GLvoid coul_actu(couleur c) ;
+GLvoid curseur_palette(couleur c);

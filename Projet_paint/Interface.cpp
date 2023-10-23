@@ -260,3 +260,21 @@ GLvoid draw_forme(vector<Icone> ico) {
 		glEnd();
 	}
 };
+
+//permet d'afficeher des curseurs sur les barres de couleurs
+GLvoid curseur_palette(couleur c) 
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLineWidth(3);
+	glBegin(GL_LINES);
+	glColor3f(0, 0, 0);
+	
+	glVertex2f(210 + (c.r*255), 10);
+	glVertex2f(210 +( c.r*255 ), 30);
+	glVertex2f(210 +(c.g*255) ,40 );
+	glVertex2f(210 +(c.g*255) , 60);
+	glVertex2f(210 +( c.b*255) ,70 );
+	glVertex2f(210 + (c.b * 255) ,90 );
+	glLineWidth(1);
+	glEnd();
+};
