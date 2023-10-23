@@ -10,13 +10,16 @@
 using namespace std;
 
 GLboolean boutonClick = false;
+GLboolean boutonClickZ = false;
 double x_draw, y_draw;
 vector<Icone> ico_coul=create_icons_coul();      //vecteur des icones de couleurs
 vector<Icone> ico_forme = create_icons_forme();
-//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
 
+//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
 int mode = 3;
+
 bool supp = false;
+
 //Initialisation des vecteurs de stockage
 
 vector<Icone> palette = create_slide();
@@ -72,39 +75,35 @@ GLvoid affichage() {
 
     // Vue ortho
     gluOrtho2D(0, windowW, windowH, 0);
-
-    //Interface
-    //create_icons();
-    if (zonedessin(y_draw)) {
-        switch (mode) {
-        case 0:
-            if (boutonClick == true) {
-                clicks.push_back(npoint(x_draw, y_draw));
-                clicks[0].c = c;
-                stockage.push_back(Forme(0, taille, clicks));
-            }
-            break;
-        case 1:
-            if (boutonClick == true && clicks.empty()) {
-                clicks.push_back(npoint(x_draw, y_draw));
-                clicks[0].c = c;
-            }
-            break;
-        case 2:
-            if (boutonClick == true && clicks.empty()) {
-                clicks.push_back(npoint(x_draw, y_draw));
-                clicks[0].c = c;
-            }
-            break;
-        case 3:
-            if (boutonClick == true && clicks.empty()) {
-                clicks.push_back(npoint(x_draw, y_draw));
-                clicks[0].c = c;
-
-            }
+ 
+     //DESSIN
+    switch (mode) {
+    case 0: //Points
+        if (boutonClickZ== true) {
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
+            stockage.push_back(Forme(0, taille, clicks));
+        }
+    break;
+    case 1: //Rectangles
+        if (boutonClickZ == true && clicks.empty()) {
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
+        }
+    break;
+    case 2: //Cercles
+        if (boutonClickZ == true && clicks.empty()) {
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
+        }
+        break;
+    case 3: //Triangles
+        if (boutonClickZ == true && clicks.empty()) {
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
+            
         }
     }
-
     if (supp) 
     {
         stockage.clear();
@@ -119,9 +118,10 @@ GLvoid affichage() {
     //Dessin des formes
     for (Forme f : stockage) {
         f.draw_form();
-    }
+    };
     coul_actu(c);
     //Dessin des icônes
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     draw_colors(ico_coul);
     draw_colors(palette);
     curseur_palette(c);
@@ -179,7 +179,7 @@ GLvoid souris(int bouton, int etat, int x, int y) {
     {
         // Test pour voir si le bouton gauche de la souris est appuyé, pour commencer à dessiner
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
-            boutonClick = true;
+            boutonClickZ = true;
 
             x_draw = x;
             y_draw = y;
@@ -191,28 +191,28 @@ GLvoid souris(int bouton, int etat, int x, int y) {
 
             switch (mode) {
             case 0: //Dessin à la souris, si on relâche le bouton gauche on arrête de dessiner
-                boutonClick = false;
+                boutonClickZ = false;
                 break;
             case 1:
-                if (boutonClick) {
+                if (boutonClickZ) {
                     clicks.push_back(npoint(x, y));
                     stockage.push_back(Forme(1, taille, clicks));
                 }
-                boutonClick = false;
+                boutonClickZ = false;
                 break;
             case 2:
-                if (boutonClick) {
+                if (boutonClickZ) {
                     clicks.push_back(npoint(x, y));
                     stockage.push_back(Forme(2, taille, clicks));
                 }
-                boutonClick = false;
+                boutonClickZ = false;
                 break;
             case 3:
-                if (boutonClick) {
+                if (boutonClickZ) {
                     clicks.push_back(npoint(x, y));
                     stockage.push_back(Forme(3, taille, clicks));
                 }
-                boutonClick = false;
+                boutonClickZ = false;
             }
         }
     }
@@ -228,11 +228,6 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         }
         }
 
-    
-   
-       
-    
-
     glFlush();
     glutPostRedisplay();
 }
@@ -242,14 +237,13 @@ GLvoid deplacementSouris(int x, int y) {
     if (not(zonedessin(y))) {
         clicks.clear();
     }
-    if (zonedessin(y) && boutonClick) {
+    if (zonedessin(y) && boutonClickZ) {
         switch (mode) {
         case 0:
             x_draw = x;
             y_draw = y;
             break;
         }
-        
     }
     if (boutonClick){
     for (int i = 0; i < palette.size(); i++)
@@ -266,6 +260,10 @@ GLvoid deplacementSouris(int x, int y) {
         if ((palette[i].est_sur(x, y)) && (i == 2))
         {
             c.b = (x - 210.0) / 255.0;
+        }
+        if ((palette[i].est_sur(x, y)) && (i == 3))
+        {
+            taille = (x - 500) / 20;
         }
     }
     }
@@ -350,6 +348,7 @@ int main(int argc, char** argv)
     glutMotionFunc(deplacementSouris);
     glutReshapeFunc(redimensionner);
 
+    clicks.clear();
     // Lancement de la boucle infinie GLUT
     glutMainLoop();
 
