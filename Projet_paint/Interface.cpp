@@ -7,12 +7,6 @@
 #include<GLUT.H>
 using namespace std;
 
-point npoint(int x, int y) {
-	point p;
-	p.x = x;
-	p.y = y;
-	return p;
-}
 
 Icone::Icone(point hg, point bd)
 {
@@ -198,7 +192,7 @@ GLvoid draw_forme(vector<Icone> ico) {
 		glRectf(hg.x, hg.y, bd.x, bd.y);
 		glColor4f(255, 255, 255, 0);
 		glBegin(GL_LINE_STRIP);
-		for (point p : i.getForme()) {
+		for (point& p : i.getForme()) {
 			glVertex2f(p.x, p.y);
 		}
 

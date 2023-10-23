@@ -32,4 +32,3 @@ vector<Icone> create_icons_coul();
 vector<Icone> create_icons_forme();
 GLvoid draw_colors(vector<Icone> ico);
 GLvoid draw_forme(vector<Icone> ico);
-point npoint(int x, int y);
