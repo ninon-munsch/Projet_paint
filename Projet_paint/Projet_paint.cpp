@@ -20,7 +20,7 @@ vector<point> points;
 vector<rectangle> rectangles;
 vector<cercle> cercles;
 vector<triangle> triangles;
-
+vector<Icone> palette = create_slide();
 // Variable temporaire pour dessiner les formes
 rectangle r;
 cercle ce;
@@ -133,9 +133,10 @@ GLvoid affichage() {
     draw_rectangles(rectangles);
     draw_circles(cercles);
     draw_triangles(triangles);
-
+    coul_actu(c);
     //Dessin des icônes
     draw_colors(ico_coul);
+    draw_colors(palette);
     draw_forme(ico_forme);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
@@ -158,9 +159,11 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         {
             if (ico_coul[i].est_sur(x, y))
             {
+                
                 c = ico_coul[i].getC();
             }
         }
+       
         for (int i = 0; i < ico_forme.size(); i++)
         {
             if (ico_forme[i].est_sur(x, y))
@@ -169,7 +172,11 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             }
         }
     }
-    if (zonedessin(y)) {
+    if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
+        boutonClick = true;
+    }
+    if (zonedessin(y))
+    {
         // Test pour voir si le bouton gauche de la souris est appuyé, pour commencer à dessiner
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
             boutonClick = true;
@@ -179,13 +186,14 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         }
 
         // si on relache le bouton gauche
-        if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_UP) {
+        if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_UP)
+        {
 
             switch (mode) {
-            case 0 : //Dessin à la souris, si on relâche le bouton gauche on arrête de dessiner
+            case 0: //Dessin à la souris, si on relâche le bouton gauche on arrête de dessiner
                 boutonClick = false;
                 break;
-            case 1 :
+            case 1:
                 if (boutonClick) {
                     r.bd.x = x;
                     r.bd.y = y;
@@ -209,9 +217,18 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             }
         }
     }
-    else {
-        boutonClick = false;
-    }
+        else {
+        if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
+            boutonClick = true;
+        }
+        else{ boutonClick = false ; }
+        }
+
+    
+   
+       
+    
+
     glFlush();
     glutPostRedisplay();
 }
@@ -226,6 +243,24 @@ GLvoid deplacementSouris(int x, int y) {
             break;
         }
         
+    }
+    if (boutonClick){
+    for (int i = 0; i < palette.size(); i++)
+    {
+        if ((palette[i].est_sur(x, y)) && (i == 0))
+        {
+            c.r = (x - 210.0) / 255.0;
+        }
+        if ((palette[i].est_sur(x, y)) && (i == 1))
+        {
+            c.g = (x - 210.0) / 255.0;
+        }
+
+        if ((palette[i].est_sur(x, y)) && (i == 2))
+        {
+            c.b = (x - 210.0) / 255.0;
+        }
+    }
     }
 
     // Appeler le re-affichage de la scene OpenGL

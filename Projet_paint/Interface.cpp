@@ -172,6 +172,53 @@ vector<Icone> create_icons_coul() {
 		return res;
 }
 
+vector<Icone> create_slide()
+{
+	vector<Icone> liste;
+	couleur rouge;
+	point hgr;
+	point bdr;
+	rouge.r = 1;
+	rouge.g = 0;
+	rouge.b = 0;
+	rouge.a = 0;
+	hgr.x = 210;
+	hgr.y = 10;
+	bdr.x = 465;
+	bdr.y = 30;
+	Icone r(hgr, bdr, rouge);
+	couleur vert;
+	point hgv;
+	point bdv;
+	vert.r = 0;
+	vert.g = 1;
+	vert.b = 0;
+	vert.a = 0;
+	hgv.x = 210;
+	hgv.y = 40;
+	bdv.x = 465;
+	bdv.y = 60;
+	Icone v(hgv, bdv, vert);
+	couleur bleu;
+	point hgb;
+	point bdb;
+	bleu.r = 0;
+	bleu.g = 0;
+	bleu.b = 1;
+	bleu.a = 0;
+	hgb.x = 210;
+	hgb.y = 70;
+	bdb.x = 465;
+	bdb.y = 90;
+	Icone b(hgb, bdb, bleu);
+	liste.push_back(r);
+	
+	liste.push_back(v);
+	liste.push_back(b);
+	return(liste);
+}
+
+
 
 GLvoid draw_colors(vector<Icone> ico) {
 
@@ -185,6 +232,19 @@ GLvoid draw_colors(vector<Icone> ico) {
 
 		glEnd();
 	}
+}
+GLvoid coul_actu(couleur c)
+{
+	vector<Icone> liste;
+	point hgb;
+	point bdb;
+	hgb.x = 160;
+	hgb.y = 10;
+	bdb.x = 200;
+	bdb.y = 50;
+	Icone ico(hgb, bdb, c);
+	liste.push_back(ico);
+	draw_colors(liste);
 }
 
 GLvoid draw_forme(vector<Icone> ico) {
