@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Forme.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="Stockage.cpp" />
     <ClCompile Include="Projet_paint.cpp">
@@ -149,6 +150,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Forme.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Stockage.h" />
   </ItemGroup>

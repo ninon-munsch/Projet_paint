@@ -6,6 +6,7 @@
 
 #include "Interface.h"
 #include "Stockage.h"
+#include "Forme.h"
 using namespace std;
 
 GLboolean boutonClick = false;
@@ -13,18 +14,16 @@ double x_draw, y_draw;
 vector<Icone> ico_coul=create_icons_coul();      //vecteur des icones de couleurs
 vector<Icone> ico_forme = create_icons_forme();
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
+
 int mode = 3;
 bool supp = false;
-//Initialisation des vecteurs de stockage
-vector<point> points;
-vector<rectangle> rectangles;
-vector<cercle> cercles;
-vector<triangle> triangles;
+
+//Initialisation du vecteur de stockage
+vector<Forme> stockage;
 
 // Variable temporaire pour dessiner les formes
-rectangle r;
-cercle ce;
-triangle t;
+vector<point> clicks;
+
 // Taille de la fenêtre
 int windowW = 1500;
 int windowH = 900;
@@ -77,49 +76,33 @@ GLvoid affichage() {
     switch (mode) {
     case 0:
         if (boutonClick == true) {
-            point p;
-            p.x = x_draw;
-            p.y = y_draw;
-            p.c = c;
-            p.size = taille;
-            points.push_back(p);
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
+            stockage.push_back(Forme(0, taille, clicks));
         }
     break;
     case 1:
-        if (boutonClick == true) {
-            point p;
-            p.x = x_draw;
-            p.y = y_draw;
-            r.c = c;
-            r.epaisseur = 0;
-            r.hg = p;
+        if (boutonClick == true && clicks.empty()) {
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
         }
     break;
     case 2:
-        if (boutonClick == true) {
-            point p;
-            p.x = x_draw;
-            p.y = y_draw;
-            ce.c = c;
-            ce.o = p;
+        if (boutonClick == true && clicks.empty()) {
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
         }
         break;
     case 3:
-        if (boutonClick == true) {
-            point p;
-            p.x = x_draw;
-            p.y = y_draw;
-            t.c = c;
-            t.so = p;
+        if (boutonClick == true && clicks.empty()) {
+            clicks.push_back(npoint(x_draw, y_draw));
+            clicks[0].c = c;
             
         }
     }
     if (supp) 
     {
-        points.clear();
-        rectangles.clear();
-        cercles.clear();
-        triangles.clear();
+        stockage.clear();
         supp = false;
     }
     //Dessin à la souris
@@ -129,10 +112,9 @@ GLvoid affichage() {
     draw_colors(ico_coul);
      
     //Dessin des formes
-    draw_points(points);
-    draw_rectangles(rectangles);
-    draw_circles(cercles);
-    draw_triangles(triangles);
+    for (Forme f : stockage) {
+        f.draw_form();
+    }
 
     //Dessin des icônes
     draw_colors(ico_coul);
@@ -187,25 +169,24 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                 break;
             case 1 :
                 if (boutonClick) {
-                    r.bd.x = x;
-                    r.bd.y = y;
-                    rectangles.push_back(r);
+                    clicks.push_back(npoint(x, y));
+                    stockage.push_back(Forme(1, taille, clicks));
                 }
                 boutonClick = false;
                 break;
             case 2:
                 if (boutonClick) {
-                    ce.r = sqrt(pow(x_draw - x, 2) + pow(y_draw - y, 2));
-                    cercles.push_back(ce);
+                    clicks.push_back(npoint(x, y));
+                    stockage.push_back(Forme(2, taille, clicks));
                 }
                 boutonClick = false;
                 break;
             case 3:
                 if (boutonClick) {
-                    t.ba.x = x;
-                    t.ba.y = y;
-                    triangles.push_back(t);
+                    clicks.push_back(npoint(x, y));
+                    stockage.push_back(Forme(3, taille, clicks));
                 }
+                boutonClick = false;
             }
         }
     }
