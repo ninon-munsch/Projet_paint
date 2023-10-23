@@ -104,7 +104,7 @@ vector<Icone> create_icons_coul() {
 	return res;
 }
 
-
+//Cree les icônes pour les différents modes de dessins
 	vector<Icone> create_icons_forme() {
 		//FOND COULEUR
 		couleur fond;
@@ -113,6 +113,7 @@ vector<Icone> create_icons_coul() {
 		fond.b = 0;
 		fond.a = 0;
 		vector<Icone> res;
+
 		//CRAYON CLASSIQUE
 		point hgcra;
 		point bdcra;
@@ -123,6 +124,7 @@ vector<Icone> create_icons_coul() {
 		bdcra.y = 100;
 		vector<point> forme = { npoint(10 + 15,60 + 32),npoint(10 + 10,60 + 25),npoint(10 + 20,60 + 20),npoint(10 + 30,60 + 15),npoint(10 + 25,60 + 7) };
 		Icone cra(hgcra, bdcra, fond,mcra,forme);
+
 		//CARRE
 		point hgca;
 		point bdca;
@@ -133,6 +135,7 @@ vector<Icone> create_icons_coul() {
 		bdca.y = 100;
 		vector<point> formeca = { npoint(hgca.x+10,hgca.y+10),npoint(hgca.x+30,hgca.y+10),npoint(hgca.x+30,hgca.y+30),npoint(hgca.x+10,hgca.y+30),npoint(hgca.x + 10,hgca.y + 10)};
 		Icone ca(hgca, bdca, fond, mca, formeca);
+
 		//CERCLE
 		int mce = 2;
 		point hgce;
@@ -148,6 +151,7 @@ vector<Icone> create_icons_coul() {
 		}
 		formece.push_back(npoint(hgce.x + 20 + 10 * cos(0 * angle), hgce.y + 20 + 10 * sin(0 * angle)));
 		Icone ce(hgce, bdce, fond,mce,formece);
+
 		//TRIANGLE
 		int mtr = 3;
 		point hgtr;
@@ -158,6 +162,7 @@ vector<Icone> create_icons_coul() {
 		bdtr.y = 100;
 		vector<point> formetr = { npoint(hgtr.x + 20,hgtr.y + 10),npoint(hgtr.x + 30,hgtr.y + 30),npoint(hgtr.x + 10,hgtr.y + 30),npoint(hgtr.x + 20,hgtr.y + 10) };
 		Icone tr(hgtr, bdtr, fond, mtr, formetr);
+
 		//LISTE D'ICONES
 		res.push_back(cra);
 		res.push_back(ca);
@@ -166,6 +171,7 @@ vector<Icone> create_icons_coul() {
 		return res;
 }
 
+//Cree les sliders de la palette
 vector<Icone> create_slide()
 {
 	vector<Icone> liste;
@@ -205,15 +211,21 @@ vector<Icone> create_slide()
 	bdb.x = 465;
 	bdb.y = 90;
 	Icone b(hgb, bdb, bleu);
+
+	//Slider taille des traits
+	couleur noir = { 0,0,0 };
+	Icone taille(npoint(500, 10), npoint(755, 30));
+
 	liste.push_back(r);
-	
 	liste.push_back(v);
 	liste.push_back(b);
+	liste.push_back(taille);
+
 	return(liste);
 }
 
 
-
+//Dessine des icônes rectangulaires
 GLvoid draw_colors(vector<Icone> ico) {
 
 	for (Icone& i : ico) {
@@ -221,12 +233,15 @@ GLvoid draw_colors(vector<Icone> ico) {
 		point hg = i.getHG();
 		point bd = i.getBD();
 		glMatrixMode(GL_MODELVIEW);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glColor4f(c.r, c.g, c.b, c.a);
 		glRectf(hg.x, hg.y, bd.x, bd.y);
 
 		glEnd();
 	}
 }
+
+//Crée une icône affichant la couleur actuellement sélectionnée
 GLvoid coul_actu(couleur c)
 {
 	vector<Icone> liste;
@@ -241,6 +256,7 @@ GLvoid coul_actu(couleur c)
 	draw_colors(liste);
 }
 
+//Dessine les symboles au sein des icônes de modes de dessins
 GLvoid draw_forme(vector<Icone> ico) {
 
 	for (Icone& i : ico) {
@@ -248,14 +264,15 @@ GLvoid draw_forme(vector<Icone> ico) {
 		point hg = i.getHG();
 		point bd = i.getBD();
 		glMatrixMode(GL_MODELVIEW);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glColor4f(c.r, c.g, c.b, c.a);
 		glRectf(hg.x, hg.y, bd.x, bd.y);
 		glColor4f(255, 255, 255, 0);
+		glLineWidth(1);
 		glBegin(GL_LINE_STRIP);
 		for (point& p : i.getForme()) {
 			glVertex2f(p.x, p.y);
 		}
-
 
 		glEnd();
 	}
