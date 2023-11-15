@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\ECN\RV\GLUT\include;C:\Dev\GLUT\include;C:\Users\benja\Desktop\Benjamin\C++\GLUT\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\ECN\RV\GLUT\include;C:\Dev\GLUT\include;C:\Users\benja\Desktop\Benjamin\C++\GLUT\GLUT\include;C:\Users\benja\Downloads\freeglut-3.4.0\freeglut-3.4.0\include\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,11 +148,13 @@
     <ClCompile Include="Projet_paint.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="texte.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Forme.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Stockage.h" />
+    <ClInclude Include="texte.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

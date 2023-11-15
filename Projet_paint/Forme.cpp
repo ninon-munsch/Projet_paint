@@ -69,3 +69,10 @@ Forme::Forme(int mode, float epaisseur, vector<point> &clicks) {
 	}
 	clicks.clear();
 }
+
+Forme::Forme()
+{
+	vector<point> f(1);
+	forme = f;
+}
+
