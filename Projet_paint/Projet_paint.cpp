@@ -1,22 +1,26 @@
 #include <Windows.h>
 #include <iostream>
-
 #include<gl/GL.h>
 #include<GLUT.H>
-
+#include<string>
 #include "Interface.h"
 #include "Stockage.h"
 #include "Forme.h"
+#include"texte.h"
 using namespace std;
 
 GLboolean boutonClick = false;
 GLboolean boutonClickZ = false;
+GLboolean writing = false;
 double x_draw, y_draw;
 vector<Icone> ico_coul=create_icons_coul();      //vecteur des icones de couleurs
 vector<Icone> ico_forme = create_icons_forme();
-
-//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
-int mode = 3;
+Forme texte;
+double x_text, y_text;//coordonnées pour mettre le texte a jour avec des clics (probablement pas necessaire)
+vector<Texte> tex; //vecteur contenant les textes à afficher
+vector < char > texte_temp;//variable temporaire pour le texte en cours de création
+//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle 3= triangle
+int mode = 4;
 
 bool supp = false;
 
@@ -41,6 +45,8 @@ float farW = 100.0f;
 couleur c; // couleur a modifier
 float taille;
 
+
+
 // Déclarations des fonctions de rappel (callbacks)
 GLvoid affichage();
 GLvoid clavier(unsigned char touche, int x, int y);
@@ -54,6 +60,8 @@ GLboolean zonedessin(int y)
 {
     return y > 110;
 }
+    
+
 
 // Définition de la fonction d'affichage
 GLvoid affichage() {
@@ -103,6 +111,8 @@ GLvoid affichage() {
             clicks[0].c = c;
             
         }
+        break;
+
     }
     if (supp) 
     {
@@ -126,13 +136,29 @@ GLvoid affichage() {
     draw_colors(palette);
     curseur_palette(c);
     draw_forme(ico_forme);
+    Texte(c, npoint(x_text, y_text), texte_temp).draw_text();
+    draw_texts(tex);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
 }
 
 // Définition de la fonction gérant les interruptions clavier
-GLvoid clavier(unsigned char touche, int x, int y) {
-
+GLvoid clavier(unsigned char touche, int x, int y) 
+{
+    if (writing) 
+    {   
+        if (touche == 13) 
+        {
+            writing = false;
+            tex.push_back(Texte(c,npoint(x_text,y_text), texte_temp));
+            texte_temp.clear();
+        }
+        else
+        {
+            texte_temp.push_back(touche);
+            Texte(c, npoint(x_text, y_text), texte_temp).draw_text();
+        }
+    }
     // Demande a GLUT de réafficher la scene
     glutPostRedisplay();
 }
@@ -183,6 +209,7 @@ GLvoid souris(int bouton, int etat, int x, int y) {
 
             x_draw = x;
             y_draw = y;
+
         }
 
         // si on relache le bouton gauche
@@ -213,6 +240,13 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     stockage.push_back(Forme(3, taille, clicks));
                 }
                 boutonClickZ = false;
+                break;
+            case 4:
+                if (boutonClickZ) {
+                    writing = true;
+                    x_text = x;
+                    y_text = y;
+                }
             }
         }
     }
@@ -271,6 +305,8 @@ GLvoid deplacementSouris(int x, int y) {
     glFlush();
     glutPostRedisplay();
 }
+
+
 
 // Callback de redimensionnement de la fenêtre
 GLvoid redimensionner(int w, int h) {
