@@ -171,6 +171,32 @@ vector<Icone> create_icons_coul() {
 		return res;
 }
 
+vector<Icone> create_icons_funcs() {
+	//FOND COULEUR
+	couleur fond;
+	fond.r = 0;
+	fond.g = 0;
+	fond.b = 0;
+	fond.a = 0;
+	vector<Icone> res;
+
+	//UNDO
+	point hg_undo;
+	point bd_undo;
+	int m_undo = 999;
+	hg_undo.x = 500;
+	hg_undo.y = 40;
+	bd_undo.x = 540;
+	bd_undo.y = 80;
+	vector<point> forme_undo = { npoint(hg_undo.x + 27,hg_undo.y + 35),npoint(hg_undo.x + 30,hg_undo.y + 25),npoint(hg_undo.x + 25,hg_undo.y + 15),npoint(hg_undo.x + 20,hg_undo.y + 12),npoint(hg_undo.x + 10,hg_undo.y + 15),npoint(hg_undo.x + 15,hg_undo.y + 5),npoint(hg_undo.x + 10,hg_undo.y + 15),npoint(hg_undo.x + 20,hg_undo.y + 22) };
+	Icone undo(hg_undo, bd_undo, fond, m_undo, forme_undo);
+
+	//LISTE D'ICONES
+	res.push_back(undo);
+	return res;
+}
+
+
 //Cree les sliders de la palette
 vector<Icone> create_slide()
 {
@@ -212,18 +238,20 @@ vector<Icone> create_slide()
 	bdb.y = 90;
 	Icone b(hgb, bdb, bleu);
 
-	//Slider taille des traits
-	couleur noir = { 0,0,0 };
-	Icone taille(npoint(500, 10), npoint(755, 30));
-
 	liste.push_back(r);
 	liste.push_back(v);
 	liste.push_back(b);
-	liste.push_back(taille);
 
 	return(liste);
 }
 
+//Crée le slider pour la taille des traits
+Icone create_icon_size() {
+	//Slider taille des traits
+	couleur noir = { 0,0,0 };
+	Icone taille(npoint(500, 10), npoint(755, 30));
+	return taille;
+}
 
 //Dessine des icônes rectangulaires
 GLvoid draw_colors(vector<Icone> ico) {
@@ -278,7 +306,23 @@ GLvoid draw_forme(vector<Icone> ico) {
 	}
 };
 
-//permet d'afficeher des curseurs sur les barres de couleurs
+//Dessine le slider pour la taille des traits
+GLvoid draw_size(Icone ico) {
+	glMatrixMode(GL_MODELVIEW);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	couleur c = ico.getC();
+	point hg = ico.getHG();
+	point bd = ico.getBD();
+	glColor4f(c.r, c.g, c.b, c.a);
+
+	glBegin(GL_POLYGON);
+	glVertex2f(hg.x, (hg.y + bd.y) / 2);
+	glVertex2f(bd.x, hg.y);
+	glVertex2f(bd.x, bd.y);
+	glEnd();
+}
+
+//permet d'afficher des curseurs sur les barres de couleurs
 GLvoid curseur_palette(couleur c) 
 {
 	glMatrixMode(GL_MODELVIEW);
@@ -295,3 +339,16 @@ GLvoid curseur_palette(couleur c)
 	glLineWidth(1);
 	glEnd();
 };
+
+GLvoid curseur_size(float taille) {
+	glMatrixMode(GL_MODELVIEW);
+	glLineWidth(3);
+	glBegin(GL_LINES);
+	glColor3f(0, 0, 255);
+
+	glVertex2f(500 + (taille * 20), 10);
+	glVertex2f(500 + (taille * 20), 30);
+
+	glLineWidth(1);
+	glEnd();
+}

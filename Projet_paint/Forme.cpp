@@ -16,7 +16,12 @@ GLvoid Forme::draw_form() {
 	glColor3f(c.r, c.g, c.b);
 	glMatrixMode(GL_MODELVIEW);
 	if (forme.size() == 1) {
-		glPointSize(epaisseur);
+		if (epaisseur != 0) {
+			glPointSize(epaisseur);
+		}
+		else {
+			glPointSize(1);
+		}
 		glBegin(GL_POINTS);
 		glVertex2f(forme[0].x, forme[0].y);
 	}
@@ -34,7 +39,6 @@ GLvoid Forme::draw_form() {
 			glVertex2f(p.x, p.y);
 		}
 	};
-	
 	glEnd();
 }
 
@@ -43,28 +47,28 @@ Forme::Forme(int mode, float epaisseur, vector<point> &clicks) {
 	this->epaisseur = epaisseur;
 	float rayon, theta;
 	switch (mode) {
-	case 0:
+	case 0: //dessin à la main
 		forme.push_back(clicks[0]);
 		break;
-	case 1:
+	case 1: //dessin rectangle
 		forme.push_back(clicks[0]);
 		forme.push_back(npoint(clicks[1].x, clicks[0].y));
 		forme.push_back(clicks[1]);
 		forme.push_back(npoint(clicks[0].x, clicks[1].y));
-		//forme.push_back(clicks[0]);
 		break;
-	case 2:
+	case 2: //dessin cercle
 		rayon =sqrt(pow(clicks[0].x-clicks[1].x, 2) + pow(clicks[0].y - clicks[1].y, 2));
 		theta = 2 * pi / nbSegCercle;
-		for (int i = 0; i < nbSegCercle; i++) {
-			forme.push_back(npoint(clicks[0].x + rayon * cos(i * theta), clicks[1].y + rayon * sin(i * theta)));
+		if ((min(clicks[0].y,clicks[1].y )-rayon)> 110) {
+			for (int i = 0; i < nbSegCercle; i++) {
+				forme.push_back(npoint(clicks[0].x + rayon * cos(i * theta), clicks[1].y + rayon * sin(i * theta)));
+			}
 		}
 		break;
-	case 3:
+	case 3: // dessin triangle
 		forme.push_back(clicks[0]);
 		forme.push_back(clicks[1]);
 		forme.push_back(npoint(2 * clicks[0].x - clicks[1].x, clicks[1].y));
-		//forme.push_back(clicks[0]);
 		break;
 	}
 	clicks.clear();

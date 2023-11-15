@@ -28,11 +28,20 @@ public:
 
 };
 
+//Permet de créer facilement une structure point
+point npoint(int x, int y);
+
+//CREATION des différentes icônes et sliders
 vector<Icone> create_icons_coul();
 vector<Icone> create_icons_forme();
+vector<Icone> create_slide();
+Icone create_icon_size();
+vector<Icone> create_icons_funcs(); //icônes fonctionnelles s'activant en un click : undo, redo, save, clear
+
+//DESSIN des icônes/sliders
 GLvoid draw_colors(vector<Icone> ico);
 GLvoid draw_forme(vector<Icone> ico);
-point npoint(int x, int y);
-vector<Icone> create_slide();
+GLvoid draw_size(Icone ico);
 GLvoid coul_actu(couleur c) ;
 GLvoid curseur_palette(couleur c);
+GLvoid curseur_size(float taille);

@@ -14,8 +14,10 @@ GLboolean boutonClickZ = false;
 double x_draw, y_draw;
 vector<Icone> ico_coul=create_icons_coul();      //vecteur des icones de couleurs
 vector<Icone> ico_forme = create_icons_forme();
+Icone ico_size = create_icon_size();
+vector<Icone> ico_funcs = create_icons_funcs();
 
-//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle
+//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3 = triangle
 int mode = 3;
 
 bool supp = false;
@@ -76,6 +78,9 @@ GLvoid affichage() {
     // Vue ortho
     gluOrtho2D(0, windowW, windowH, 0);
  
+    //Valeurs par défaut
+    glPointSize(1);
+
      //DESSIN
     switch (mode) {
     case 0: //Points
@@ -109,23 +114,25 @@ GLvoid affichage() {
         stockage.clear();
         supp = false;
     }
-    //Dessin à la souris
-    
-    //Dessin des icônes
-
-    draw_colors(ico_coul);
      
     //Dessin des formes
     for (Forme f : stockage) {
         f.draw_form();
     };
+
+    //Actualisation de la couleur
     coul_actu(c);
+
     //Dessin des icônes
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     draw_colors(ico_coul);
     draw_colors(palette);
     curseur_palette(c);
     draw_forme(ico_forme);
+    draw_size(ico_size);
+    curseur_size(taille);
+
+    draw_forme(ico_funcs);
     // Forcer l‘affichage d‘OpenGL
     glFlush();
 }
@@ -140,7 +147,7 @@ GLvoid clavier(unsigned char touche, int x, int y) {
 // Fonction de rappel de la souris
 GLvoid souris(int bouton, int etat, int x, int y) {
 
-    //test en cas de clic sur une icone couleur
+    //test en cas de clic sur une icone
     if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) 
     {
         for (int i = 0; i < ico_coul.size(); i++)
@@ -149,6 +156,9 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             {
                 c = ico_coul[i].getC();
             }
+        }
+        if (ico_size.est_sur(x, y)) {
+            taille = (x - 500)/20;
         }
         for (int i = 0; i < palette.size(); i++)
         {
@@ -171,6 +181,18 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             if (ico_forme[i].est_sur(x, y))
             {
                 mode = ico_forme[i].getM();
+            }
+        }
+        if (ico_funcs[0].est_sur(x, y)) {
+            if (!stockage.empty()) {
+                if ((stockage.back().getF().size() == 1) && (stockage.size() != 1)) {
+                    while ((stockage.back().getF().size() == 1) && (stockage.size() != 1)) {
+                        stockage.pop_back();
+                    }
+                }
+                else {
+                    stockage.pop_back();
+                }
             }
         }
     }
@@ -246,6 +268,9 @@ GLvoid deplacementSouris(int x, int y) {
         }
     }
     if (boutonClick){
+        if (ico_size.est_sur(x, y)) {
+            taille = (x - 500) / 20;
+        }
     for (int i = 0; i < palette.size(); i++)
     {
         if ((palette[i].est_sur(x, y)) && (i == 0))
@@ -260,10 +285,6 @@ GLvoid deplacementSouris(int x, int y) {
         if ((palette[i].est_sur(x, y)) && (i == 2))
         {
             c.b = (x - 210.0) / 255.0;
-        }
-        if ((palette[i].est_sur(x, y)) && (i == 3))
-        {
-            taille = (x - 500) / 20;
         }
     }
     }
