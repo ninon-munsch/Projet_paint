@@ -295,3 +295,5 @@ GLvoid curseur_palette(couleur c)
 	glLineWidth(1);
 	glEnd();
 };
+
+
