@@ -165,12 +165,22 @@ vector<Icone> create_icons_coul() {
 
 		//Texte
 
+		point hg_txt;
+		point bd_txt;
+		int m_txt = 4;
+		hg_txt.x = 550;
+		hg_txt.y = 40;
+		bd_txt.x = 590;
+		bd_txt.y = 80;
+		vector<point> forme_txt = { npoint(bd_txt.x-20,bd_txt.y-5),npoint(bd_txt.x - 20,hg_txt.y + 5),npoint(bd_txt.x - 5,hg_txt.y + 5),npoint(hg_txt.x + 5,hg_txt.y + 5) };
+		Icone txt(hg_txt, bd_txt, fond, m_txt, forme_txt);
 
 		//LISTE D'ICONES
 		res.push_back(cra);
 		res.push_back(ca);
 		res.push_back(ce);
 		res.push_back(tr);
+		res.push_back(txt);
 		return res;
 }
 
