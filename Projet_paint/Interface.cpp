@@ -163,6 +163,9 @@ vector<Icone> create_icons_coul() {
 		vector<point> formetr = { npoint(hgtr.x + 20,hgtr.y + 10),npoint(hgtr.x + 30,hgtr.y + 30),npoint(hgtr.x + 10,hgtr.y + 30),npoint(hgtr.x + 20,hgtr.y + 10) };
 		Icone tr(hgtr, bdtr, fond, mtr, formetr);
 
+		//Texte
+
+
 		//LISTE D'ICONES
 		res.push_back(cra);
 		res.push_back(ca);

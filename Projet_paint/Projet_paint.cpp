@@ -15,6 +15,8 @@ GLboolean writing = false;
 double x_draw, y_draw;
 vector<Icone> ico_coul=create_icons_coul();      //vecteur des icones de couleurs
 vector<Icone> ico_forme = create_icons_forme();
+Icone ico_size = create_icon_size();
+vector<Icone> ico_funcs = create_icons_funcs();
 double x_text, y_text;//coordonnées pour mettre le texte a jour avec des clics (probablement pas necessaire)
 vector<Texte> tex; //vecteur contenant les textes à afficher
 vector < char > texte_temp;//variable temporaire pour le texte en cours de création
@@ -158,6 +160,11 @@ GLvoid clavier(unsigned char touche, int x, int y)
             writing = false;
             tex.push_back(Texte(c,npoint(x_text,y_text), texte_temp));
             texte_temp.clear();
+        }
+        else if (touche==8 && !texte_temp.empty())
+        {
+            texte_temp.pop_back();
+               Texte(c, npoint(x_text, y_text), texte_temp).draw_text();
         }
         else
         {
