@@ -191,8 +191,20 @@ vector<Icone> create_icons_funcs() {
 	vector<point> forme_undo = { npoint(hg_undo.x + 27,hg_undo.y + 35),npoint(hg_undo.x + 30,hg_undo.y + 25),npoint(hg_undo.x + 25,hg_undo.y + 15),npoint(hg_undo.x + 20,hg_undo.y + 12),npoint(hg_undo.x + 10,hg_undo.y + 15),npoint(hg_undo.x + 15,hg_undo.y + 5),npoint(hg_undo.x + 10,hg_undo.y + 15),npoint(hg_undo.x + 20,hg_undo.y + 22) };
 	Icone undo(hg_undo, bd_undo, fond, m_undo, forme_undo);
 
+	//REDO
+	point hg_redo;
+	point bd_redo;
+	int m_redo = 999;
+	hg_redo.x = 500;
+	hg_redo.y = 40;
+	bd_redo.x = 540;
+	bd_redo.y = 80;
+	vector<point> forme_redo = { npoint(hg_redo.x + 27,hg_redo.y + 35),npoint(hg_redo.x + 30,hg_redo.y + 25),npoint(hg_redo.x + 25,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 12),npoint(hg_redo.x + 10,hg_redo.y + 15),npoint(hg_redo.x + 15,hg_redo.y + 5),npoint(hg_redo.x + 10,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 22) };
+	Icone redo(hg_redo, bd_redo, fond, m_redo, forme_redo);
+
 	//LISTE D'ICONES
 	res.push_back(undo);
+	res.push_back(redo);
 	return res;
 }
 
