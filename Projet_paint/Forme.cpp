@@ -59,9 +59,9 @@ Forme::Forme(int mode, float epaisseur, vector<point> &clicks) {
 	case 2: //dessin cercle
 		rayon =sqrt(pow(clicks[0].x-clicks[1].x, 2) + pow(clicks[0].y - clicks[1].y, 2));
 		theta = 2 * pi / nbSegCercle;
-		if ((min(clicks[0].y,clicks[1].y )-rayon)> 110) {
+		if ((clicks[0].y-rayon)> 110) {
 			for (int i = 0; i < nbSegCercle; i++) {
-				forme.push_back(npoint(clicks[0].x + rayon * cos(i * theta), clicks[1].y + rayon * sin(i * theta)));
+				forme.push_back(npoint(clicks[0].x + rayon * cos(i * theta), clicks[0].y + rayon * sin(i * theta)));
 			}
 		}
 		break;
