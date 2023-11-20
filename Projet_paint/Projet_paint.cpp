@@ -15,7 +15,7 @@ GLboolean writing = false;
 double x_draw, y_draw;
 
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte
-int mode = 4;
+int mode = 0;
 
 bool supp = false;
 
@@ -28,7 +28,7 @@ vector<Icone> ico_funcs = create_icons_funcs();
 double x_text, y_text;//coordonnées pour mettre le texte a jour avec des clics (probablement pas necessaire)
 vector<Texte> tex; //vecteur contenant les textes à afficher
 vector < char > texte_temp;//variable temporaire pour le texte en cours de création
-
+vector<point> vect_temp;
 //Initialisation du vecteur de stockage
 vector<Forme> stockage;
 vector<Forme> corbeille; //permet de stocker les éléments récemment annulés
@@ -43,7 +43,7 @@ float focale = 65.0f;
 float nearW = 0.1f;
 float farW = 100.0f;
 
-//Caraxtéristiques graphiques
+//Caraxtéristiques graphiques  
 couleur c; // couleur a modifier
 float taille;
 
@@ -90,40 +90,48 @@ GLvoid affichage() {
     glPointSize(1);
 
      //DESSIN
-    switch (mode) {
-    case 0: //Points
-        if (boutonClickZ== true) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-            stockage.push_back(Forme(0, taille, clicks));
-        }
-    break;
-    case 1: //Rectangles
-        if (boutonClickZ == true && clicks.empty()) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-        }
-    break;
-    case 2: //Cercles
-        if (boutonClickZ == true && clicks.empty()) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-        }
-        break;
-    case 3: //Triangles
-        if (boutonClickZ == true && clicks.empty()) {
-            clicks.push_back(npoint(x_draw, y_draw));
-            clicks[0].c = c;
-            
-        }
-        break;
+    //switch (mode) {
+    //case 0: //Points
+    //    if (boutonClickZ== true) 
+    //    {
+    //        clicks.push_back(npoint(x_draw, y_draw));
+    //        if (clicks.empty()) {
+    //            clicks[0].c = c;
+    //            stockage.push_back(Forme(0, taille, clicks));
+    //        }
+    //        else {
+    //            clicks.push_back(npoint(x_draw, y_draw));
+    //            stockage.back().getF().push_back(npoint(x_draw, y_draw));
+    //        }
 
-    }
-    if (supp) 
-    {
-        stockage.clear();
-        supp = false;
-    }
+    //    }
+    //break;
+    //case 1: //Rectangles
+    //    if (boutonClickZ == true && clicks.empty()) {
+    //        clicks.push_back(npoint(x_draw, y_draw));
+    //        clicks[0].c = c;
+    //    }
+    //break;
+    //case 2: //Cercles
+    //    if (boutonClickZ == true && clicks.empty()) {
+    //        clicks.push_back(npoint(x_draw, y_draw));
+    //        clicks[0].c = c;
+    //    }
+    //    break;
+    //case 3: //Triangles
+    //    if (boutonClickZ == true && clicks.empty()) {
+    //        clicks.push_back(npoint(x_draw, y_draw));
+    //        clicks[0].c = c;
+    //        
+    //    }
+    //    break;
+
+    //}
+    //if (supp) 
+    //{
+    //    stockage.clear();
+    //    supp = false;
+    //}
      
     //Dessin des formes
     for (Forme f : stockage) {
@@ -183,6 +191,9 @@ GLvoid souris(int bouton, int etat, int x, int y) {
     //test en cas de clic sur une icone
     if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) 
     {
+        if (not(zonedessin(y))) {
+            clicks.clear();
+        }
         for (int i = 0; i < ico_coul.size(); i++)
         {
             if (ico_coul[i].est_sur(x, y))
@@ -235,9 +246,50 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         // Test pour voir si le bouton gauche de la souris est appuyé, pour commencer à dessiner
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
             boutonClickZ = true;
+            switch (mode)
+            {
+            case 0: //
+                if (boutonClickZ && clicks.empty()) {
+                    clicks.push_back(npoint(x, y));
+ 
+                        clicks[0].c = c;
+                        stockage.push_back(Forme(0, taille, clicks));
+                    
 
-            x_draw = x;
-            y_draw = y;
+                }
+                
+
+                break;
+            case 1:
+                if (boutonClickZ && clicks.empty()) {
+                    clicks.push_back(npoint(x, y));
+                    clicks[0].c = c;
+                }
+
+                break;
+            case 2:
+                if (boutonClickZ && clicks.empty()) {
+                    clicks.push_back(npoint(x, y));
+                    clicks[0].c = c;
+                }
+ 
+                break;
+            case 3:
+                if (boutonClickZ && clicks.empty()) {
+                    clicks.push_back(npoint(x, y));
+                    clicks[0].c = c;
+                }
+                break;
+            case 4:
+                if (boutonClickZ) {
+                    writing = true;
+                    x_text = x;
+                    y_text = y;
+
+                }
+                break;
+            }
+
 
         }
 
@@ -245,28 +297,41 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_UP)
         {
 
-            switch (mode) {
+            switch (mode)
+            {
             case 0: //Dessin à la souris, si on relâche le bouton gauche on arrête de dessiner
+                if (boutonClickZ && !clicks.empty())
+                {
+                    
+                    vect_temp = stockage.back().getF();
+                    vect_temp.push_back(npoint(x, y));
+                        stockage.back().setF(vect_temp);
+                        clicks.clear();
+                }
                 boutonClickZ = false;
+
                 break;
             case 1:
-                if (boutonClickZ) {
+                if (boutonClickZ ) {
                     clicks.push_back(npoint(x, y));
                     stockage.push_back(Forme(1, taille, clicks));
+                    clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
             case 2:
-                if (boutonClickZ) {
+                if (boutonClickZ ) {
                     clicks.push_back(npoint(x, y));
                     stockage.push_back(Forme(2, taille, clicks));
+                    clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
             case 3:
-                if (boutonClickZ) {
+                if (boutonClickZ ) {
                     clicks.push_back(npoint(x, y));
                     stockage.push_back(Forme(3, taille, clicks));
+                    clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
@@ -285,11 +350,11 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         else {
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
             boutonClick = true;
-            clicks.clear();
         }
         if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_UP)
         {
-            boutonClick = false ; 
+            boutonClick = false ;
+
             clicks.clear();
         }
         }
@@ -303,13 +368,17 @@ GLvoid deplacementSouris(int x, int y) {
     if (not(zonedessin(y))) {
         clicks.clear();
     }
-    if (zonedessin(y) && boutonClickZ) {
-        switch (mode) {
-        case 0:
+    if (zonedessin(y) && boutonClickZ && mode==0) {
+
+            if (!clicks.empty())
+            {
+
+                vect_temp = stockage.back().getF();
+                vect_temp.push_back(npoint(x, y));
+                stockage.back().setF(vect_temp);
+            }
             x_draw = x;
-            y_draw = y;
-            break;
-        }
+                y_draw = y;
     }
     if (boutonClick){
         if (ico_size.est_sur(x, y)) {
@@ -415,7 +484,6 @@ int main(int argc, char** argv)
     glutMotionFunc(deplacementSouris);
     glutReshapeFunc(redimensionner);
 
-    clicks.clear();
     // Lancement de la boucle infinie GLUT
     glutMainLoop();
 

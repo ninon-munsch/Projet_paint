@@ -9,6 +9,7 @@ using namespace std;
 
 
 class Forme {
+	int mode;
 	couleur c;
 	float epaisseur;
 	vector<point> forme;

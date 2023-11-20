@@ -15,15 +15,30 @@ float nbSegCercle = 32;
 GLvoid Forme::draw_form() {
 	glColor3f(c.r, c.g, c.b);
 	glMatrixMode(GL_MODELVIEW);
-	if (forme.size() == 1) {
-		if (epaisseur != 0) {
-			glPointSize(epaisseur);
+	if (mode==0) {
+		if (forme.size()==1) {
+			if (epaisseur != 0) {
+				glPointSize(epaisseur);
+			}
+			else {
+				glPointSize(1);
+			}
+			glBegin(GL_POINTS);
+			glVertex2f(forme[0].x, forme[0].y);
 		}
 		else {
-			glPointSize(1);
+			glBegin(GL_LINE_STRIP);
+			if (epaisseur == 0) {
+				glLineWidth(1);
+			}
+			else {
+				glLineWidth(epaisseur);
+			}
+			for (point& p : forme) {
+				glVertex2f(p.x, p.y);
+			}
 		}
-		glBegin(GL_POINTS);
-		glVertex2f(forme[0].x, forme[0].y);
+
 	}
 	else {
 		if (epaisseur != 0) {
@@ -43,6 +58,7 @@ GLvoid Forme::draw_form() {
 }
 
 Forme::Forme(int mode, float epaisseur, vector<point> &clicks) {
+	this->mode = mode;
 	this->c = clicks[0].c;
 	this->epaisseur = epaisseur;
 	float rayon, theta;
@@ -71,7 +87,6 @@ Forme::Forme(int mode, float epaisseur, vector<point> &clicks) {
 		forme.push_back(npoint(2 * clicks[0].x - clicks[1].x, clicks[1].y));
 		break;
 	}
-	clicks.clear();
 }
 
 Forme::Forme()
