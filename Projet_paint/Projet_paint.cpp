@@ -155,7 +155,7 @@ GLvoid clavier(unsigned char touche, int x, int y)
 {
     if (writing) 
     {   
-        if (touche == 13) 
+        if (touche == 13 ) 
         {
             writing = false;
             tex.push_back(Texte(c,npoint(x_text,y_text), texte_temp));
