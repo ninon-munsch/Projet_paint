@@ -297,7 +297,6 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                 break;
             case 1:
                 if (boutonClickZ ) {
-                    
                     stockage.back() = Forme(mode, taille, clicks);
                     clicks.clear();
                 }
@@ -322,8 +321,12 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             case 4:
                 if (boutonClickZ) {
                     writing = true;
-                    x_text = x;
-                    y_text = y;
+                    if (zonedessin(y))
+                    {
+                        x_text = x;
+                        y_text = y;
+                    }
+
                     
                 }
                 boutonClickZ = false;
@@ -352,15 +355,15 @@ GLvoid deplacementSouris(int x, int y) {
     if (not(zonedessin(y)) && boutonClickZ) {
         switch (mode)
         {
-        case 0:
-            if (!clicks.empty())
-            {
+        //case 0:
+        //    if (!clicks.empty())
+        //    {
 
-                vect_temp = stockage.back().getF();
-                vect_temp.push_back(npoint(x, y));
-                stockage.back().setF(vect_temp);
-            }
-            break;
+        //        vect_temp = stockage.back().getF();
+        //        vect_temp.push_back(npoint(x, y));
+        //        stockage.back().setF(vect_temp);
+        //    }
+        //    break;
         case 1:
             clicks[1] = npoint(x, 110);
             stockage.back() = Forme(mode, taille, clicks);

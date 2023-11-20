@@ -27,13 +27,14 @@ GLvoid Forme::draw_form() {
 			glVertex2f(forme[0].x, forme[0].y);
 		}
 		else {
-			glBegin(GL_LINE_STRIP);
 			if (epaisseur == 0) {
 				glLineWidth(1);
 			}
 			else {
 				glLineWidth(epaisseur);
 			}
+			glBegin(GL_LINE_STRIP);
+
 			for (point& p : forme) {
 				glVertex2f(p.x, p.y);
 			}
