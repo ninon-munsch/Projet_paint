@@ -13,24 +13,25 @@ GLboolean boutonClick = false;
 GLboolean boutonClickZ = false;
 GLboolean writing = false;
 double x_draw, y_draw;
-vector<Icone> ico_coul=create_icons_coul();      //vecteur des icones de couleurs
+
+//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte
+int mode = 4;
+
+bool supp = false;
+
+//Initialisation des vecteurs d'icones
+vector<Icone> palette = create_slide();
+vector<Icone> ico_coul = create_icons_coul();      //vecteur des icones de couleurs
 vector<Icone> ico_forme = create_icons_forme();
 Icone ico_size = create_icon_size();
 vector<Icone> ico_funcs = create_icons_funcs();
 double x_text, y_text;//coordonnées pour mettre le texte a jour avec des clics (probablement pas necessaire)
 vector<Texte> tex; //vecteur contenant les textes à afficher
 vector < char > texte_temp;//variable temporaire pour le texte en cours de création
-//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte
-int mode = 4;
-
-bool supp = false;
-
-//Initialisation des vecteurs de stockage
-
-vector<Icone> palette = create_slide();
 
 //Initialisation du vecteur de stockage
 vector<Forme> stockage;
+vector<Forme> corbeille; //permet de stocker les éléments récemment annulés
 
 // Variable temporaire pour dessiner les formes
 vector<point> clicks;
@@ -140,12 +141,12 @@ GLvoid affichage() {
     draw_forme(ico_forme);
     draw_size(ico_size);
     curseur_size(taille);
-
     draw_forme(ico_funcs);
 
     //dessine les textes
     Texte(c, npoint(x_text, y_text), texte_temp).draw_text();
     draw_texts(tex);
+
     // Forcer l‘affichage d‘OpenGL
     glFlush();
 }
@@ -153,13 +154,13 @@ GLvoid affichage() {
 // Définition de la fonction gérant les interruptions clavier
 GLvoid clavier(unsigned char touche, int x, int y) 
 {
-    if (writing) 
-    {   
-        if (touche == 13 ) 
+    if (writing)
+    {
+        if (touche == 13||mode!=4)
         {
             writing = false;
             tex.push_back(Texte(c,npoint(x_text,y_text), texte_temp));
-            texte_temp.clear();
+            texte_temp.clear();  
         }
         else if (touche==8 && !texte_temp.empty())
         {
@@ -212,7 +213,7 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         {
             if (ico_forme[i].est_sur(x, y))
             {
-                mode = ico_forme[i].getM();
+                mode = ico_forme[i].getM();   
             }
         }
         if (ico_funcs[0].est_sur(x, y)) {
@@ -274,7 +275,10 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     writing = true;
                     x_text = x;
                     y_text = y;
+                    
                 }
+                boutonClickZ = false;
+                break;
             }
         }
     }
