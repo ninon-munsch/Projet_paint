@@ -227,15 +227,32 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                 mode = ico_forme[i].getM();   
             }
         }
-        if (ico_funcs[0].est_sur(x, y)) {
+        if (ico_funcs[0].est_sur(x, y)) { //option UNDO
             if (!stockage.empty()) {
                 if ((stockage.back().getF().size() == 1) && (stockage.size() != 1)) {
                     while ((stockage.back().getF().size() == 1) && (stockage.size() != 1)) {
+                        corbeille.push_back(stockage.back());
                         stockage.pop_back();
                     }
                 }
                 else {
+                    corbeille.push_back(stockage.back());
                     stockage.pop_back();
+                }
+            }
+        }
+
+        if (ico_funcs[1].est_sur(x, y)) { //option REDO
+            if (!corbeille.empty()) {
+                if ((corbeille.back().getF().size() == 1) && (corbeille.size() != 1)) {
+                    while ((corbeille.back().getF().size() == 1) && (corbeille.size() != 1)) {
+                        stockage.push_back(corbeille.back());
+                        corbeille.pop_back();
+                    }
+                }
+                else {
+                    stockage.push_back(corbeille.back());
+                    corbeille.pop_back();
                 }
             }
         }
