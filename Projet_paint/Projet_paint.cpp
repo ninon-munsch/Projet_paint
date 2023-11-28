@@ -14,7 +14,7 @@ GLboolean boutonClickZ = false;
 GLboolean writing = false;
 double x_draw, y_draw;
 
-//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte
+//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte 5=Pipette
 int mode = 1;
 
 bool supp = false;
@@ -272,7 +272,16 @@ GLvoid souris(int bouton, int etat, int x, int y) {
 
                 }
                 break;
-            }
+            case 5:
+                    if (boutonClickZ) 
+                    {
+
+                        c = pipetteMarie(x, abs(y - windowH));
+
+                        boutonClickZ = false;
+                    }
+                    break;
+            }   
 
 
         }

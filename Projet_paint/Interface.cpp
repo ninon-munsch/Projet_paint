@@ -174,6 +174,17 @@ vector<Icone> create_icons_coul() {
 		bd_txt.y = 80;
 		vector<point> forme_txt = { npoint(bd_txt.x-20,bd_txt.y-5),npoint(bd_txt.x - 20,hg_txt.y + 5),npoint(bd_txt.x - 5,hg_txt.y + 5),npoint(hg_txt.x + 5,hg_txt.y + 5) };
 		Icone txt(hg_txt, bd_txt, fond, m_txt, forme_txt);
+		//PIPETTE
+		point hg_pip;
+		point bd_pip;
+		int m_pip = 5;
+		hg_pip.x = 650;
+		hg_pip.y = 40;
+		bd_pip.x = 690;
+		bd_pip.y = 80;
+		//vector<point> forme_redo = { npoint(hg_redo.x + 13,hg_redo.y + 35),npoint(hg_redo.x + 10,hg_redo.y + 25),npoint(hg_redo.x + 15,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 12),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 25,hg_redo.y + 5),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 22) };
+		Icone pip(hg_pip, bd_pip, fond,m_pip);
+
 
 		//LISTE D'ICONES
 		res.push_back(cra);
@@ -181,6 +192,7 @@ vector<Icone> create_icons_coul() {
 		res.push_back(ce);
 		res.push_back(tr);
 		res.push_back(txt);
+		res.push_back(pip);
 		return res;
 }
 
@@ -214,6 +226,8 @@ vector<Icone> create_icons_funcs() {
 	bd_redo.y = 80;
 	vector<point> forme_redo = { npoint(hg_redo.x + 13,hg_redo.y + 35),npoint(hg_redo.x + 10,hg_redo.y + 25),npoint(hg_redo.x + 15,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 12),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 25,hg_redo.y + 5),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 22) };
 	Icone redo(hg_redo, bd_redo, fond, m_redo, forme_redo);
+
+
 
 	//LISTE D'ICONES
 	res.push_back(undo);
@@ -376,4 +390,16 @@ GLvoid curseur_size(float taille) {
 
 	glLineWidth(1);
 	glEnd();
+}
+
+couleur pipetteMarie(int x,int y)
+{
+	
+	couleur coul;
+	float pixel[4];
+	glReadPixels(x,y, 1, 1, GL_RGBA, GL_FLOAT, pixel);
+	coul.r = pixel[0] ;
+	coul.g = pixel[1] ;
+	coul.b = pixel[2] ;
+	return coul;
 }

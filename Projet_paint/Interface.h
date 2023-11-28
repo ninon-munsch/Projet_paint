@@ -45,3 +45,6 @@ GLvoid draw_size(Icone ico);
 GLvoid coul_actu(couleur c) ;
 GLvoid curseur_palette(couleur c);
 GLvoid curseur_size(float taille);
+
+//fonctionnalité
+couleur pipetteMarie(int x,int y);
