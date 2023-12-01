@@ -1,9 +1,8 @@
+#pragma once
 #include <Windows.h>
 #include <iostream>
 #include <vector>
 #include "Forme.h"
-#include "Stockage.h"
-
 #include<gl/GL.h>
 #include<GLUT.H>
 using namespace std;
@@ -12,7 +11,7 @@ float pi = 3.14159;
 float nbSegCercle = 32;
 
 
-GLvoid Forme::draw_form() {
+GLvoid Forme::draw() {
 	glColor3f(c.r, c.g, c.b);
 	glMatrixMode(GL_MODELVIEW);
 	if (mode==0) {

@@ -1,3 +1,4 @@
+#pragma once
 #include <Windows.h>
 #include <iostream>
 #include<gl/GL.h>
@@ -31,12 +32,11 @@ vector < char > texte_temp;//variable temporaire pour le texte en cours de créa
 vector<point> vect_temp;
 Forme previsu; //permet la prévisualisation des formes
 //Initialisation du vecteur de stockage
-vector<Forme> stockage;
-vector<Forme> corbeille; //permet de stocker les éléments récemment annulés
+vector<Element*> stockage;
+vector<Element*> corbeille; //permet de stocker les éléments récemment annulés
 
 // Variable temporaire pour dessiner les formes
 vector<point> clicks;
-
 // Taille de la fenêtre
 int windowW = 1500;
 int windowH = 900;
@@ -90,10 +90,12 @@ GLvoid affichage() {
     //Valeurs par défaut
     glPointSize(1);
 
-     
+    //dessine les textes
+    Texte(c, npoint(x_text, y_text), texte_temp).draw();
+
     //Dessin des formes
-    for (Forme f : stockage) {
-        f.draw_form();
+    for (Element* f : stockage) {
+        f->draw();
     };
 
     //Actualisation de la couleur
@@ -108,10 +110,6 @@ GLvoid affichage() {
     draw_size(ico_size);
     curseur_size(taille);
     draw_forme(ico_funcs);
-    
-    //dessine les textes
-    Texte(c, npoint(x_text, y_text), texte_temp).draw_text();
-    draw_texts(tex);
 
     // Forcer l‘affichage d‘OpenGL
     glFlush();
@@ -131,12 +129,12 @@ GLvoid clavier(unsigned char touche, int x, int y)
         else if (touche==8 && !texte_temp.empty())
         {
             texte_temp.pop_back();
-               Texte(c, npoint(x_text, y_text), texte_temp).draw_text();
+               Texte(c, npoint(x_text, y_text), texte_temp).draw();
         }
         else
         {
             texte_temp.push_back(touche);
-            Texte(c, npoint(x_text, y_text), texte_temp).draw_text();
+            Texte(c, npoint(x_text, y_text), texte_temp).draw();
         }
     }
     // Demande a GLUT de réafficher la scene
@@ -187,8 +185,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         }
         if (ico_funcs[0].est_sur(x, y)) { //option UNDO
             if (!stockage.empty()) {
-                if ((stockage.back().getF().size() == 1) && (stockage.size() != 1)) {
-                    while ((stockage.back().getF().size() == 1) && (stockage.size() != 1)) {
+                if ((stockage.back()->getMode() == 0) && (stockage.size() != 1)) {
+                    while ((stockage.back()->getMode()==0) && (stockage.size() != 1)) {
                         corbeille.push_back(stockage.back());
                         stockage.pop_back();
                     }
@@ -202,8 +200,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
 
         if (ico_funcs[1].est_sur(x, y)) { //option REDO
             if (!corbeille.empty()) {
-                if ((corbeille.back().getF().size() == 1) && (corbeille.size() != 1)) {
-                    while ((corbeille.back().getF().size() == 1) && (corbeille.size() != 1)) {
+                if ((corbeille.back()->getMode() == 0) && (corbeille.size() != 1)) {
+                    while ((corbeille.back()->getMode() == 0) && (corbeille.size() != 1)) {
                         stockage.push_back(corbeille.back());
                         corbeille.pop_back();
                     }
@@ -228,7 +226,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     clicks.push_back(npoint(x, y));
 
                     clicks[0].c = c;
-                    stockage.push_back(Forme(0, taille, clicks));
+                    Forme tmp = Forme(0, taille, clicks);
+                    stockage.push_back(&tmp);
 
 
                 }
@@ -240,7 +239,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     clicks.push_back(npoint(x, y));
                     clicks.push_back(npoint(x, y));
                     clicks[0].c = c;
-                    stockage.push_back(Forme(mode, taille, clicks));
+                    Forme tmp = Forme(mode, taille, clicks);
+                    stockage.push_back(&tmp);
                 }
 
                 break;
@@ -249,7 +249,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     clicks.push_back(npoint(x, y));
                     clicks.push_back(npoint(x, y));
                     clicks[0].c = c;
-                    stockage.push_back(Forme(mode, taille, clicks));
+                    Forme tmp = Forme(mode, taille, clicks);
+                    stockage.push_back(&tmp);
                 }
 
                 break;
@@ -258,7 +259,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     clicks.push_back(npoint(x, y));
                     clicks.push_back(npoint(x, y));
                     clicks[0].c = c;
-                    stockage.push_back(Forme(mode, taille, clicks));
+                    Forme tmp = Forme(mode, taille, clicks);
+                    stockage.push_back(&tmp);
                 }
                 break;
             case 4:
@@ -295,34 +297,35 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             case 0: //Dessin à la souris, si on relâche le bouton gauche on arrête de dessiner
                 if (boutonClickZ && !clicks.empty())
                 {
-                    
-                    vect_temp = stockage.back().getF();
+                    Forme* lastForme = dynamic_cast<Forme*>(stockage.back());
+                    vect_temp = lastForme->getF();
                     vect_temp.push_back(npoint(x, y));
-                        stockage.back().setF(vect_temp);
-                        clicks.clear();
+                    lastForme->setF(vect_temp);
+                    clicks.clear();
                 }
                 boutonClickZ = false;
 
                 break;
             case 1:
                 if (boutonClickZ ) {
-                    stockage.back() = Forme(mode, taille, clicks);
+                    Forme tmp = Forme(mode, taille, clicks);
+                    stockage.back() = &tmp;
                     clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
             case 2:
                 if (boutonClickZ ) {
-                    
-                    stockage.back()=Forme(mode, taille, clicks);
+                    Forme tmp = Forme(mode, taille, clicks);
+                    stockage.back()=&tmp;
                     clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
             case 3:
                 if (boutonClickZ ) {
-                    
-                    stockage.back() = Forme(mode, taille, clicks);
+                    Forme tmp = Forme(mode, taille, clicks);
+                    stockage.back() = &tmp;
                     clicks.clear();
                 }
                 boutonClickZ = false;
@@ -362,8 +365,12 @@ GLvoid souris(int bouton, int etat, int x, int y) {
 GLvoid deplacementSouris(int x, int y) {
     // si le bouton gauche est appuye et qu'on se deplace, on veut dessiner des points en continu
     if (not(zonedessin(y)) && boutonClickZ) {
+        Forme tmp;
+        Forme tmp2;
+        Forme tmp3;
         switch (mode)
         {
+
         //case 0:
         //    if (!clicks.empty())
         //    {
@@ -375,41 +382,50 @@ GLvoid deplacementSouris(int x, int y) {
         //    break;
         case 1:
             clicks[1] = npoint(x, 110);
-            stockage.back() = Forme(mode, taille, clicks);
+            tmp = Forme(mode, taille, clicks);
+            stockage.back() = &tmp;
             break;
         case 2:
             clicks[1] = npoint(x, 110);
-            stockage.back() = Forme(mode, taille, clicks);
+            tmp2 = Forme(mode, taille, clicks);
+            stockage.back() = &tmp2;
             break;
         case 3:
             clicks[1] = npoint(x, 110);
-            stockage.back() = Forme(mode, taille, clicks);
+            tmp3 = Forme(mode, taille, clicks);
+            stockage.back() = &tmp3;
             break;
         }
     }
     if (zonedessin(y) && boutonClickZ ) {//permet d'ajouter les points en maintenant le click
+        Forme* lastForme = dynamic_cast<Forme*>(stockage.back());
+        Forme tmp;
+        Forme tmp2;
+        Forme tmp3;
         switch (mode)
         {
         case 0:
             if (!clicks.empty())
             {
-
-                vect_temp = stockage.back().getF();
+                vect_temp = lastForme->getF();
                 vect_temp.push_back(npoint(x, y));
-                stockage.back().setF(vect_temp);
+                lastForme->setF(vect_temp);
             }
             break;
         case 1:
             clicks[1] = npoint(x, y);
-            stockage.back() = Forme(mode, taille, clicks);
+            tmp = Forme(mode, taille, clicks);
+            lastForme = &tmp;
             break;
         case 2:
             clicks[1] = npoint(x, y);
-            stockage.back() = Forme(mode, taille, clicks);
+            tmp2 = Forme(mode, taille, clicks);
+            lastForme = &tmp2;
             break;
         case 3:
             clicks[1] = npoint(x, y);
-            stockage.back()=Forme(mode, taille, clicks);
+            tmp3 = Forme(mode, taille, clicks);
+            lastForme = &tmp3;
             break;
         }
     }

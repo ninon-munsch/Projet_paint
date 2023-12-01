@@ -1,4 +1,8 @@
+#pragma once
 #include "texte.h"
+#include "Element.h"
+
+
 
 Texte::Texte(couleur co, point pos, vector<char> te)
 {
@@ -7,11 +11,7 @@ Texte::Texte(couleur co, point pos, vector<char> te)
 	position = pos;
 }
 
-Texte::Texte()
-{
-}
-
-GLvoid Texte::draw_text()
+GLvoid Texte::draw()
 {
 	int x_temp = position.x;
 	for (int i = 0; i < text.size(); i++)
@@ -29,7 +29,7 @@ GLvoid Texte::draw_text()
 GLvoid draw_texts(vector<Texte> tex) {
 
 	for (Texte& t : tex) {
-		t.draw_text();
+		t.draw();
 		glEnd();
 	}
 }
