@@ -134,12 +134,14 @@ GLvoid clavier(unsigned char touche, int x, int y)
         else if (touche==8 && !texte_temp.empty())
         {
             texte_temp.pop_back();
-              /* Texte(c, npoint(x_text, y_text), texte_temp).draw();*/
+            stockage.pop_back();
+            stockage.push_back(new Texte(c, npoint(x_text, y_text), texte_temp));
         }
         else
         {
             texte_temp.push_back(touche);
-         /*   Texte(c, npoint(x_text, y_text), texte_temp).draw();*/
+            stockage.pop_back();
+            stockage.push_back(new Texte(c, npoint(x_text, y_text), texte_temp));
         }
     }
     // Demande a GLUT de réafficher la scene
