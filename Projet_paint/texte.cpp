@@ -9,6 +9,7 @@ Texte::Texte(couleur co, point pos, vector<char> te)
 	text = te;
 	c = co;
 	position = pos;
+	mode = 4;
 }
 
 GLvoid Texte::draw()

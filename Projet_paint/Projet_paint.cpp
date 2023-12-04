@@ -87,6 +87,9 @@ GLvoid affichage() {
     // Vue ortho
     gluOrtho2D(0, windowW, windowH, 0);
  
+    //Angle d'ouverture (ZOOM)
+    //gluPerspective(100, windowW / windowH, 1, 1000);
+
     //Valeurs par défaut
     glPointSize(1);
 
@@ -120,21 +123,23 @@ GLvoid clavier(unsigned char touche, int x, int y)
 {
     if (writing)
     {
+       
         if (touche == 13||mode!=4)
         {
             writing = false;
-            tex.push_back(Texte(c,npoint(x_text,y_text), texte_temp));
+            stockage.pop_back();
+            stockage.push_back(new Texte(c, npoint(x_text, y_text), texte_temp));
             texte_temp.clear();  
         }
         else if (touche==8 && !texte_temp.empty())
         {
             texte_temp.pop_back();
-               Texte(c, npoint(x_text, y_text), texte_temp).draw();
+              /* Texte(c, npoint(x_text, y_text), texte_temp).draw();*/
         }
         else
         {
             texte_temp.push_back(touche);
-            Texte(c, npoint(x_text, y_text), texte_temp).draw();
+         /*   Texte(c, npoint(x_text, y_text), texte_temp).draw();*/
         }
     }
     // Demande a GLUT de réafficher la scene
@@ -224,10 +229,9 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             case 0: //
                 if ( clicks.empty()) {
                     clicks.push_back(npoint(x, y));
-
                     clicks[0].c = c;
-                    Forme tmp = Forme(0, taille, clicks);
-                    stockage.push_back(&tmp);
+                    //Forme tmp = Forme(0, taille, clicks);
+                    stockage.push_back(new Forme(0, taille, clicks));
 
 
                 }
@@ -239,8 +243,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     clicks.push_back(npoint(x, y));
                     clicks.push_back(npoint(x, y));
                     clicks[0].c = c;
-                    Forme tmp = Forme(mode, taille, clicks);
-                    stockage.push_back(&tmp);
+                    //Forme tmp = Forme(mode, taille, clicks);
+                    stockage.push_back(new Forme(mode, taille, clicks));//&tmp);
                 }
 
                 break;
@@ -249,8 +253,8 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     clicks.push_back(npoint(x, y));
                     clicks.push_back(npoint(x, y));
                     clicks[0].c = c;
-                    Forme tmp = Forme(mode, taille, clicks);
-                    stockage.push_back(&tmp);
+                    //Forme tmp = Forme(mode, taille, clicks);
+                    stockage.push_back(new Forme(mode, taille, clicks));
                 }
 
                 break;
@@ -259,12 +263,16 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                     clicks.push_back(npoint(x, y));
                     clicks.push_back(npoint(x, y));
                     clicks[0].c = c;
-                    Forme tmp = Forme(mode, taille, clicks);
-                    stockage.push_back(&tmp);
+                    //Forme tmp = Forme(mode, taille, clicks);
+                    stockage.push_back(new Forme(mode, taille, clicks));
                 }
                 break;
             case 4:
                 if (boutonClickZ) {
+                    if (writing==false)
+                    {
+                        stockage.push_back(new Texte(c, npoint(x, y), texte_temp));
+                    }
                     writing = true;
                     if (zonedessin(y))
                     {
@@ -308,39 +316,39 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                 break;
             case 1:
                 if (boutonClickZ ) {
-                    Forme tmp = Forme(mode, taille, clicks);
-                    stockage.back() = &tmp;
+                    //Forme tmp = Forme(mode, taille, clicks);
+                    stockage.back() = new Forme(mode, taille, clicks);
                     clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
             case 2:
                 if (boutonClickZ ) {
-                    Forme tmp = Forme(mode, taille, clicks);
-                    stockage.back()=&tmp;
+                    //Forme tmp = Forme(mode, taille, clicks);
+                    stockage.back()=new Forme(mode, taille, clicks);
                     clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
             case 3:
                 if (boutonClickZ ) {
-                    Forme tmp = Forme(mode, taille, clicks);
-                    stockage.back() = &tmp;
+                    //Forme tmp = Forme(mode, taille, clicks);
+                    stockage.back() = new Forme(mode, taille, clicks);
                     clicks.clear();
                 }
                 boutonClickZ = false;
                 break;
             case 4:
-                if (boutonClickZ) {
-                    writing = true;
-                    if (zonedessin(y))
-                    {
-                        x_text = x;
-                        y_text = y;
-                    }
+                //if (boutonClickZ) {
+                //    writing = true;
+                //    if (zonedessin(y))
+                //    {
+                //        x_text = x;
+                //        y_text = y;
+                //    }
 
-                    
-                }
+                //    
+                //}
                 boutonClickZ = false;
                 break;
             }
@@ -382,29 +390,30 @@ GLvoid deplacementSouris(int x, int y) {
         //    break;
         case 1:
             clicks[1] = npoint(x, 110);
-            tmp = Forme(mode, taille, clicks);
-            stockage.back() = &tmp;
+            //tmp = Forme(mode, taille, clicks);
+            stockage.back() = new Forme(mode, taille, clicks);
             break;
         case 2:
             clicks[1] = npoint(x, 110);
-            tmp2 = Forme(mode, taille, clicks);
-            stockage.back() = &tmp2;
+            //tmp2 = Forme(mode, taille, clicks);
+            stockage.back() = new Forme(mode, taille, clicks);
             break;
         case 3:
             clicks[1] = npoint(x, 110);
-            tmp3 = Forme(mode, taille, clicks);
-            stockage.back() = &tmp3;
+            //tmp3 = Forme(mode, taille, clicks);
+            stockage.back() = new Forme(mode, taille, clicks);
             break;
         }
     }
     if (zonedessin(y) && boutonClickZ ) {//permet d'ajouter les points en maintenant le click
-        Forme* lastForme = dynamic_cast<Forme*>(stockage.back());
-        Forme tmp;
-        Forme tmp2;
-        Forme tmp3;
+        Forme* lastForme;
+        //Forme tmp;
+        //Forme tmp2;
+        //Forme tmp3;
         switch (mode)
         {
         case 0:
+            lastForme = dynamic_cast<Forme*>(stockage.back());
             if (!clicks.empty())
             {
                 vect_temp = lastForme->getF();
@@ -414,18 +423,18 @@ GLvoid deplacementSouris(int x, int y) {
             break;
         case 1:
             clicks[1] = npoint(x, y);
-            tmp = Forme(mode, taille, clicks);
-            lastForme = &tmp;
+            //tmp2 = Forme(mode, taille, clicks);
+            stockage.back() = new Forme(mode, taille, clicks);
             break;
         case 2:
-            clicks[1] = npoint(x, y);
-            tmp2 = Forme(mode, taille, clicks);
-            lastForme = &tmp2;
+            clicks[1] = npoint(x,y);
+            //tmp2 = Forme(mode, taille, clicks);
+            stockage.back() = new Forme(mode, taille, clicks);
             break;
         case 3:
             clicks[1] = npoint(x, y);
-            tmp3 = Forme(mode, taille, clicks);
-            lastForme = &tmp3;
+            //tmp2 = Forme(mode, taille, clicks);
+            stockage.back() = new Forme(mode, taille, clicks);
             break;
         }
     }
