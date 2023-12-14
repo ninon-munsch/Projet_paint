@@ -219,6 +219,9 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                 }
             }
         }
+        if (ico_funcs[2].est_sur(x, y)) { //option CLEAR
+            stockage.clear();
+        }
     }
 
     if (zonedessin(y))

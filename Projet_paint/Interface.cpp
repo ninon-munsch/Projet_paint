@@ -174,6 +174,7 @@ vector<Icone> create_icons_coul() {
 		bd_txt.y = 80;
 		vector<point> forme_txt = { npoint(bd_txt.x-20,bd_txt.y-5),npoint(bd_txt.x - 20,hg_txt.y + 5),npoint(bd_txt.x - 5,hg_txt.y + 5),npoint(hg_txt.x + 5,hg_txt.y + 5) };
 		Icone txt(hg_txt, bd_txt, fond, m_txt, forme_txt);
+
 		//PIPETTE
 		point hg_pip;
 		point bd_pip;
@@ -227,11 +228,23 @@ vector<Icone> create_icons_funcs() {
 	vector<point> forme_redo = { npoint(hg_redo.x + 13,hg_redo.y + 35),npoint(hg_redo.x + 10,hg_redo.y + 25),npoint(hg_redo.x + 15,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 12),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 25,hg_redo.y + 5),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 22) };
 	Icone redo(hg_redo, bd_redo, fond, m_redo, forme_redo);
 
+	//CLEAR
+	point hg_clear;
+	point bd_clear;
+	int m_clear = 999;
+	hg_clear.x = 700;
+	hg_clear.y = 40;
+	bd_clear.x = 740;
+	bd_clear.y = 80;
+	vector<point> forme_clear = {};
+	//vector<point> forme_clear = { npoint(hg_clear.x + 13,hg_clear.y + 35),npoint(hg_clear.x + 10,hg_clear.y + 25),npoint(hg_clear.x + 15,hg_clear.y + 15),npoint(hg_clear.x + 20,hg_clear.y + 12),npoint(hg_clear.x + 30,hg_clear.y + 15),npoint(hg_clear.x + 25,hg_clear.y + 5),npoint(hg_clear.x + 30,hg_clear.y + 15),npoint(hg_clear.x + 20,hg_clear.y + 22) };
+	Icone clear(hg_clear, bd_clear, fond, m_clear, forme_clear);
 
 
 	//LISTE D'ICONES
 	res.push_back(undo);
 	res.push_back(redo);
+	res.push_back(clear);
 	return res;
 }
 
