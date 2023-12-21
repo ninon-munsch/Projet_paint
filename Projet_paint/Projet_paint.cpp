@@ -144,6 +144,10 @@ GLvoid clavier(unsigned char touche, int x, int y)
             stockage.push_back(new Texte(c, npoint(x_text, y_text), texte_temp));
         }
     }
+    if (!writing && touche == 's') {
+        
+        glReadPixels(0, 110, windowW, windowH - 110, GL_RGB, GL_UNSIGNED_BYTE, data);
+    }
     // Demande a GLUT de réafficher la scene
     glutPostRedisplay();
 }

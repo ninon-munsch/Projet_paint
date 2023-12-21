@@ -155,6 +155,7 @@
     <ClInclude Include="Element.h" />
     <ClInclude Include="Forme.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="stb_image_write.h" />
     <ClInclude Include="Stockage.h" />
     <ClInclude Include="texte.h" />
   </ItemGroup>
