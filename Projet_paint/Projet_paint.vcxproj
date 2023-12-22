@@ -86,9 +86,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\ECN\RV\GLUT\include;C:\Dev\GLUT\include;C:\Users\benja\Desktop\Benjamin\C++\GLUT\GLUT\include;C:\Users\benja\Downloads\freeglut-3.4.0\freeglut-3.4.0\include\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\ECN\RV\GLUT\include;C:\Dev\GLUT\include;C:\Users\benja\Desktop\Benjamin\C++\GLUT\GLUT\include;C:\Users\benja\Downloads\freeglut-3.4.0\freeglut-3.4.0\include\GL;C:\Dev\stb-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dessin.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="Forme.cpp" />
     <ClCompile Include="Interface.cpp" />
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Element.h" />
+    <ClInclude Include="Dessin.h" />
     <ClInclude Include="Forme.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Stockage.h" />

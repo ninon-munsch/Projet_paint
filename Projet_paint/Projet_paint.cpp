@@ -8,6 +8,7 @@
 #include "Stockage.h"
 #include "Forme.h"
 #include"texte.h"
+#include "Dessin.h"
 using namespace std;
 
 GLboolean boutonClick = false;
@@ -19,7 +20,7 @@ float zoom_x;
 float zoom_y;
 
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte 5=Pipette
-int mode = 1;
+int mode = 6;
 
 bool supp = false;
 
@@ -142,6 +143,10 @@ GLvoid affichage() {
 // Définition de la fonction gérant les interruptions clavier
 GLvoid clavier(unsigned char touche, int x, int y) 
 {
+    if (touche == 13)
+    {
+        exportation(windowW,windowH);
+    }
     if (writing)
     {
        
@@ -334,6 +339,20 @@ GLvoid souris(int bouton, int etat, int x, int y) {
                         boutonClickZ = false;
                     }
                     break;
+            case 6:
+                if (boutonClickZ)
+                {
+                    couleur cb;
+                    float pixel[4];
+                    glReadPixels(x, abs(y - windowH), 1, 1, GL_RGBA, GL_FLOAT, pixel);
+                    cb.r = pixel[0];
+                    cb.g = pixel[1];
+                    cb.b = pixel[2];
+
+                    remplissage(x, y, c, cb, windowW, windowH,clicks,stockage);
+                    boutonClickZ = false;
+
+                }
             }   
 
 

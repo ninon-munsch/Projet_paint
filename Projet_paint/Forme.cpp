@@ -64,7 +64,14 @@ Forme::Forme(int mode, float epaisseur, vector<point> &clicks) {
 	float rayon, theta;
 	switch (mode) {
 	case 0: //dessin à la main
-		forme.push_back(clicks[0]);
+		if (clicks.size() == 1)
+		{
+			forme.push_back(clicks[0]);
+		}
+		else {
+			forme.push_back(clicks[0]);
+			forme.push_back(clicks[1]);
+		}
 		break;
 	case 1: //dessin rectangle
 		forme.push_back(clicks[0]);
