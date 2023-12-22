@@ -5,6 +5,10 @@
 #include "Stockage.h"
 #include<gl/GL.h>
 #include<GLUT.H>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include<stb_image_write.h>
 using namespace std;
 
 
@@ -402,4 +406,19 @@ couleur pipetteMarie(int x,int y)
 	coul.g = pixel[1] ;
 	coul.b = pixel[2] ;
 	return coul;
+}
+
+
+GLvoid exportation(int width, int height)
+{
+	
+	int stride = 3 * width;
+	int bufferSize = stride * height;
+	std::vector<char> buffer(bufferSize);
+	glPixelStorei(GL_PACK_ALIGNMENT, 4);
+	glReadBuffer(GL_FRONT);
+	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+	stbi_flip_vertically_on_write(true);
+	stbi_write_png("C:/Users/benja/Desktop/test.png", width, height, 3, buffer.data(), stride);
+	return;
 }

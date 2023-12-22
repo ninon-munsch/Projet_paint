@@ -46,5 +46,6 @@ GLvoid coul_actu(couleur c) ;
 GLvoid curseur_palette(couleur c);
 GLvoid curseur_size(float taille);
 
-//fonctionnalité
+//fonctionnalités
 couleur pipetteMarie(int x,int y);
+GLvoid exportation(int width, int height);
