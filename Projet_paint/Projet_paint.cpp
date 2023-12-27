@@ -98,27 +98,10 @@ GLvoid affichage() {
 
 
 
-    //Applique le zoom
+    //Matrix de base pour l'interface
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(zoom_x, zoom_y, 0);
-    glScalef(zoom, zoom, 0);
-    glTranslatef(-zoom_x, -zoom_y, 0);
 
-
-    //Valeurs par défaut
-    glPointSize(1);
-
-    //dessine les textes
-    Texte(c, npoint(x_text, y_text), texte_temp).draw();
-
-    //Dessin des formes
-    for (Element* f : stockage) {
-        f->draw();
-    };
-
-    //Actualisation de la couleur
-    coul_actu(c);
 
     //Dessin des icônes
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -129,6 +112,28 @@ GLvoid affichage() {
     draw_size(ico_size);
     curseur_size(taille);
     draw_forme(ico_funcs);
+
+    //Valeurs par défaut
+    glPointSize(1);
+    //Actualisation de la couleur
+    coul_actu(c);
+
+    //Mise à l'échelle de la zone de dessin
+    glTranslatef(zoom_x, zoom_y, 0);
+    glScalef(zoom, zoom, 0);
+    glTranslatef(-zoom_x, -zoom_y, 0);
+
+    //Dessine le texte temporaire
+    Texte(c, npoint(x_text, y_text), texte_temp).draw();
+
+    //Dessin des formes
+    for (Element* f : stockage) {
+        f->draw();
+    };
+
+
+
+
 
     // Forcer l‘affichage d‘OpenGL
     glFlush();
