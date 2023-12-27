@@ -14,6 +14,9 @@ GLboolean boutonClick = false;
 GLboolean boutonClickZ = false;
 GLboolean writing = false;
 double x_draw, y_draw;
+float zoom = 1.;
+float zoom_x;
+float zoom_y;
 
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte 5=Pipette
 int mode = 1;
@@ -56,6 +59,8 @@ GLvoid clavier(unsigned char touche, int x, int y);
 GLvoid souris(int bouton, int etat, int x, int y);
 GLvoid deplacementSouris(int x, int y);
 GLvoid redimensionner(int w, int h);
+GLvoid mouseWheel(int, int, int, int);
+
 
 //Zone debut dessin y=110
 
@@ -90,19 +95,13 @@ GLvoid affichage() {
     //Angle d'ouverture (ZOOM)
     //gluPerspective(100, windowW / windowH, 1, 1000);
 
-    //Valeurs par défaut
-    glPointSize(1);
 
-    //dessine les textes
-    Texte(c, npoint(x_text, y_text), texte_temp).draw();
 
-    //Dessin des formes
-    for (Element* f : stockage) {
-        f->draw();
-    };
 
-    //Actualisation de la couleur
-    coul_actu(c);
+    //Matrix de base pour l'interface
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
 
     //Dessin des icônes
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -113,6 +112,28 @@ GLvoid affichage() {
     draw_size(ico_size);
     curseur_size(taille);
     draw_forme(ico_funcs);
+
+    //Valeurs par défaut
+    glPointSize(1);
+    //Actualisation de la couleur
+    coul_actu(c);
+
+    //Mise à l'échelle de la zone de dessin
+    glTranslatef(zoom_x, zoom_y, 0);
+    glScalef(zoom, zoom, 0);
+    glTranslatef(-zoom_x, -zoom_y, 0);
+
+    //Dessine le texte temporaire
+    Texte(c, npoint(x_text, y_text), texte_temp).draw();
+
+    //Dessin des formes
+    for (Element* f : stockage) {
+        f->draw();
+    };
+
+
+
+
 
     // Forcer l‘affichage d‘OpenGL
     glFlush();
@@ -144,12 +165,29 @@ GLvoid clavier(unsigned char touche, int x, int y)
             stockage.push_back(new Texte(c, npoint(x_text, y_text), texte_temp));
         }
     }
+    else {
+        if (touche == 'i') {
+            zoom *= 2;
+            zoom_x = x;
+            zoom_y = y;
+            cout << "Zoom + : " << zoom << endl;
+        }
+
+        if (touche == 'o') {
+            zoom *= 0.5;
+            zoom_x = x;
+            zoom_y = y;
+            cout << "Zoom - : " << zoom << endl;
+        }
+    }
+
     // Demande a GLUT de réafficher la scene
     glutPostRedisplay();
 }
 
 // Fonction de rappel de la souris
 GLvoid souris(int bouton, int etat, int x, int y) {
+
 
     //test en cas de clic sur une icone
     if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) 
