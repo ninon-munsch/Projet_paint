@@ -17,6 +17,7 @@ double x_draw, y_draw;
 float zoom = 1.;
 float zoom_x;
 float zoom_y;
+float zoom_fact = 2;
 
 //Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte 5=Pipette
 int mode = 1;
@@ -59,7 +60,6 @@ GLvoid clavier(unsigned char touche, int x, int y);
 GLvoid souris(int bouton, int etat, int x, int y);
 GLvoid deplacementSouris(int x, int y);
 GLvoid redimensionner(int w, int h);
-GLvoid mouseWheel(int, int, int, int);
 
 
 //Zone debut dessin y=110
@@ -68,7 +68,54 @@ GLboolean zonedessin(int y)
 {
     return y > 110;
 }
-    
+
+GLvoid zooming(bool in) 
+{
+    vector<Element*> temp;
+    for (Element* e : stockage) 
+    {
+        if (e->getMode() == 4)
+        {
+            Texte* txt = dynamic_cast<Texte*>(e);
+
+            if (in)
+            {
+                txt->setPos(npoint(txt->getPos().x*zoom_fact + zoom_x, txt->getPos().y*zoom_fact + zoom_y));
+
+            }
+            else
+            {
+                txt->setPos(npoint(txt->getPos().x/zoom_fact + zoom_x, txt->getPos().y/zoom_fact + zoom_y));
+            }
+            txt->setPos(npoint(txt->getPos().x + zoom_x, txt->getPos().y + zoom_y));
+            temp.push_back(txt);
+        }
+        else
+        {
+            Forme* f = dynamic_cast<Forme*>(e);
+            vector<point> temp_pts;
+            for (point p : f->getF()) 
+            {
+                if (in) 
+                {
+                    p.x *= zoom_fact;
+                    p.y *= zoom_fact;
+                }
+                else
+                {
+                    p.x /= zoom_fact;
+                    p.y /= zoom_fact;
+                }
+                p.x += zoom_x;
+                p.y += zoom_y;
+                temp_pts.push_back(p);
+            }
+            f->setF(temp_pts);
+        }
+    }
+    stockage = temp;
+    glFlush();
+}
 
 
 // Définition de la fonction d'affichage
@@ -118,10 +165,10 @@ GLvoid affichage() {
     //Actualisation de la couleur
     coul_actu(c);
 
-    //Mise à l'échelle de la zone de dessin
-    glTranslatef(zoom_x, zoom_y, 0);
-    glScalef(zoom, zoom, 0);
-    glTranslatef(-zoom_x, -zoom_y, 0);
+    ////Mise à l'échelle de la zone de dessin
+    //glTranslatef(zoom_x, zoom_y, 0);
+    //glScalef(zoom, zoom, 0);
+    //glTranslatef(-zoom_x, -zoom_y, 0);
 
     //Dessine le texte temporaire
     Texte(c, npoint(x_text, y_text), texte_temp).draw();
@@ -167,17 +214,19 @@ GLvoid clavier(unsigned char touche, int x, int y)
     }
     else {
         if (touche == 'i') {
-            zoom *= 2;
+            zoom *= zoom_fact;
             zoom_x = x;
             zoom_y = y;
             cout << "Zoom + : " << zoom << endl;
+            zooming(true);
         }
 
         if (touche == 'o') {
-            zoom *= 0.5;
+            zoom /= zoom_fact;
             zoom_x = x;
             zoom_y = y;
             cout << "Zoom - : " << zoom << endl;
+            zooming(false);
         }
     }
 
