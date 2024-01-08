@@ -366,12 +366,16 @@ GLvoid souris(int bouton, int etat, int x, int y) {
             switch (mode)
             {
             case 0: //Dessin à la souris, si on relâche le bouton gauche on arrête de dessiner
-                if (boutonClickZ && !clicks.empty())
+                if (boutonClickZ && !clicks.empty()&& zonedessin(y))
                 {
                     Forme* lastForme = dynamic_cast<Forme*>(stockage.back());
                     vect_temp = lastForme->getF();
                     vect_temp.push_back(npoint(x, y));
                     lastForme->setF(vect_temp);
+                    clicks.clear();
+                }
+                else
+                {
                     clicks.clear();
                 }
                 boutonClickZ = false;

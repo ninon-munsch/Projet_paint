@@ -3,38 +3,6 @@
 
 
 GLvoid affichage();
-//GLvoid remplissage(int x, int y, couleur cd, couleur cb,int width,int height, vector<point>& clicks, vector<Forme>& stockage)
-//{
-//	if (x>0 && y>110 && y<height &&x<width)
-//	{
-//		
-//		couleur coul;
-//		float pixel[4];
-//		glReadPixels(x,abs(y-height), 1, 1, GL_RGBA, GL_FLOAT, pixel);
-//		coul.r = pixel[0];
-//		coul.g = pixel[1];
-//		coul.b = pixel[2];
-//		if (coul.r == cb.r && coul.g == cb.g && coul.b == cb.b)
-//		{
-//			clicks.push_back(npoint(x, y));
-//			clicks[0].c = cd;
-//			stockage.push_back(Forme(0, 1, clicks));
-//			clicks.clear();
-//			
-//
-//			remplissage(x + 1, y, cd, cb,width,height, clicks, stockage);
-//			affichage();
-//			remplissage(x - 1, y, cd, cb, width, height, clicks, stockage);
-//			affichage();
-//			remplissage(x, y + 1, cd, cb, width, height, clicks, stockage);
-//			affichage();
-//			remplissage(x, y - 1, cd, cb, width, height, clicks, stockage);
-//			affichage();
-//		}
-//	}
-//
-//	return ;
-//}
 
 bool testcoul(int x, int y, int height, couleur test)
 {
@@ -49,6 +17,10 @@ bool testcoul(int x, int y, int height, couleur test)
 
 GLvoid remplissage(int x, int y, couleur cd, couleur cb, int width, int height, vector<point>& clicks, vector<Element*>& stockage)
 {
+	if(cb.r==cd.r && cb.g == cd.g&& cb.b == cd.b)
+	{
+		return;
+	}
 	vector<point> aPeindre;
 	aPeindre.push_back(npoint(x, y));
 	point temp;
