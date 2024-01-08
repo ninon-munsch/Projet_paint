@@ -31,6 +31,7 @@ Icone::Icone(point hg, point bd, couleur co, int m)
 	this->coin_bd = bd;
 	this->c = co;
 	this->m = m;
+	this->tex = false;
 }
 
 Icone::Icone(point hg, point bd, couleur co, int m,vector<point> forme)
@@ -40,6 +41,17 @@ Icone::Icone(point hg, point bd, couleur co, int m,vector<point> forme)
 	this->c = co;
 	this->m = m;
 	this->forme = forme;
+	this->tex = false;
+}
+
+Icone::Icone(point hg, point bd, couleur co, int m, bool tex,string nomtex)
+{
+	this->coin_hg = hg;
+	this->coin_bd = bd;
+	this->c = co;
+	this->m = m;
+	this->tex = tex;
+	this->nomtex = nomtex;
 }
 
 
@@ -187,8 +199,22 @@ vector<Icone> create_icons_coul() {
 		hg_pip.y = 40;
 		bd_pip.x = 690;
 		bd_pip.y = 80;
+
+
+		
 		//vector<point> forme_redo = { npoint(hg_redo.x + 13,hg_redo.y + 35),npoint(hg_redo.x + 10,hg_redo.y + 25),npoint(hg_redo.x + 15,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 12),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 25,hg_redo.y + 5),npoint(hg_redo.x + 30,hg_redo.y + 15),npoint(hg_redo.x + 20,hg_redo.y + 22) };
-		Icone pip(hg_pip, bd_pip, fond,m_pip);
+		Icone pip(hg_pip, bd_pip, fond,m_pip,true,"Pipette.jpg");
+		//Remplissage
+		point hg_remp;
+		point bd_remp;
+		int m_remp = 6;
+		hg_remp.x = 750;
+		hg_remp.y = 40;
+		bd_remp.x = 790;
+		bd_remp.y = 80;
+		vector<point> forme_remp = {};
+		//vector<point> forme_remp = { npoint(hg_remp.x + 13,hg_remp.y + 35),npoint(hg_remp.x + 10,hg_remp.y + 25),npoint(hg_remp.x + 15,hg_remp.y + 15),npoint(hg_remp.x + 20,hg_remp.y + 12),npoint(hg_remp.x + 30,hg_remp.y + 15),npoint(hg_remp.x + 25,hg_remp.y + 5),npoint(hg_remp.x + 30,hg_remp.y + 15),npoint(hg_remp.x + 20,hg_remp.y + 22) };
+		Icone remp(hg_remp, bd_remp, fond, m_remp, true, "remplissage.jpg");
 
 
 		//LISTE D'ICONES
@@ -197,6 +223,7 @@ vector<Icone> create_icons_coul() {
 		res.push_back(ce);
 		res.push_back(tr);
 		res.push_back(txt);
+		res.push_back(remp);
 		res.push_back(pip);
 		return res;
 }
@@ -242,13 +269,25 @@ vector<Icone> create_icons_funcs() {
 	bd_clear.y = 80;
 	vector<point> forme_clear = {};
 	//vector<point> forme_clear = { npoint(hg_clear.x + 13,hg_clear.y + 35),npoint(hg_clear.x + 10,hg_clear.y + 25),npoint(hg_clear.x + 15,hg_clear.y + 15),npoint(hg_clear.x + 20,hg_clear.y + 12),npoint(hg_clear.x + 30,hg_clear.y + 15),npoint(hg_clear.x + 25,hg_clear.y + 5),npoint(hg_clear.x + 30,hg_clear.y + 15),npoint(hg_clear.x + 20,hg_clear.y + 22) };
-	Icone clear(hg_clear, bd_clear, fond, m_clear, forme_clear);
+	Icone clear(hg_clear, bd_clear, fond, m_clear, true, "gomme.jpg");
+
+	//EXPORT
+	point hg_expo;
+	point bd_expo;
+	int m_expo = 999;
+	hg_expo.x = 800;
+	hg_expo.y = 40;
+	bd_expo.x = 840;
+	bd_expo.y = 80;
+	vector<point> forme_expo = {};
+	Icone expo(hg_expo, bd_expo, fond, m_expo, true, "save.jpg");
 
 
 	//LISTE D'ICONES
 	res.push_back(undo);
 	res.push_back(redo);
 	res.push_back(clear);
+	res.push_back(expo);
 	return res;
 }
 
@@ -343,21 +382,30 @@ GLvoid coul_actu(couleur c)
 //Dessine les symboles au sein des icônes de modes de dessins
 GLvoid draw_forme(vector<Icone> ico) {
 
-	for (Icone& i : ico) {
-		couleur c = i.getC();
-		point hg = i.getHG();
-		point bd = i.getBD();
-		glMatrixMode(GL_MODELVIEW);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glColor4f(c.r, c.g, c.b, c.a);
-		glRectf(hg.x, hg.y, bd.x, bd.y);
-		glColor4f(255, 255, 255, 0);
-		glLineWidth(1);
-		glBegin(GL_LINE_STRIP);
-		for (point& p : i.getForme()) {
-			glVertex2f(p.x, p.y);
+	for (Icone& i : ico)
+	{
+		if (i.gettex())
+		{
+			tex_ico(i);
 		}
+		else 
+		{
 
+			couleur c = i.getC();
+			point hg = i.getHG();
+			point bd = i.getBD();
+			glMatrixMode(GL_MODELVIEW);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glColor4f(c.r, c.g, c.b, c.a);
+			glRectf(hg.x, hg.y, bd.x, bd.y);
+
+			glColor4f(255, 255, 255, 0);
+			glLineWidth(1);
+			glBegin(GL_LINE_STRIP);
+			for (point& p : i.getForme()) {
+				glVertex2f(p.x, p.y);
+			}
+		}
 		glEnd();
 	}
 };
@@ -424,7 +472,6 @@ couleur pipetteMarie(int x,int y)
 
 GLvoid exportation(int width, int height)
 {
-	char* path;
 	string chemin;
 	cout << "Entrez : Chemin/NomDuFichier.png" << endl;
 	cin >> chemin;
@@ -437,4 +484,44 @@ GLvoid exportation(int width, int height)
 	stbi_flip_vertically_on_write(true);
 	stbi_write_png(chemin.c_str(), width, height, 3, buffer.data(), stride);
 	return;
+}
+
+GLvoid tex_ico(Icone i)
+{
+	int width, height, nrChannels;
+	
+	unsigned char* data = stbi_load(i.getnomtex().c_str(), &width, &height, &nrChannels, 0);
+	unsigned int texture;
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	glEnable(GL_TEXTURE_2D);
+
+	glBegin(GL_QUADS);
+	couleur c = i.getC();
+	point hg = i.getHG();
+	point bd = i.getBD();
+	glMatrixMode(GL_MODELVIEW);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	
+
+	glTexCoord2f(1, 1);
+	glVertex2f(bd.x, bd.y);
+
+	glTexCoord2f(0, 1);
+	glVertex2f(hg.x, bd.y);
+
+	glTexCoord2f(0, 0);
+	glVertex2f(hg.x, hg.y);
+
+	glTexCoord2f(1, 0);
+	glVertex2f(bd.x, hg.y);
+
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
 }

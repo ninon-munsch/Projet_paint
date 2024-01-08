@@ -13,6 +13,8 @@ class Icone {
 	point coin_bd;
 	couleur c;
 	int m;
+	bool tex;
+	string nomtex;
 	vector<point> forme; //Ensemble de points à tracer dans l'ordre formant le symbole de l'icône
 public:
 	GLboolean est_sur(int x, int y);
@@ -20,8 +22,11 @@ public:
 	Icone(point hg, point bd,couleur co);
 	Icone(point hg, point bd, couleur co, int m);
 	Icone(point hg, point bd, couleur co, int m,vector<point> forme);
+	Icone(point hg, point bd, couleur co, int m,bool tex,string nomtex);
 	point getHG() { return coin_hg; };
 	point getBD() { return coin_bd; };
+	bool gettex() { return tex; };
+	string getnomtex() { return nomtex; };
 	couleur getC() { return c; };
 	int getM() { return m; };
 	vector<point> getForme() { return forme; };
@@ -49,3 +54,4 @@ GLvoid curseur_size(float taille);
 //fonctionnalités
 couleur pipetteMarie(int x,int y);
 GLvoid exportation(int width, int height);
+GLvoid tex_ico(Icone i);

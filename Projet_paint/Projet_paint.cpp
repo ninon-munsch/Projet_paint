@@ -19,8 +19,8 @@ float zoom = 1.;
 float zoom_x;
 float zoom_y;
 
-//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte 5=Pipette
-int mode = 6;
+//Mode de dessin. O = pinceau, 1 = rectangle, 2 = cercle, 3= triangle, 4= Texte 5=Pipette 6=remplissage
+int mode = 0;
 
 bool supp = false;
 
@@ -143,10 +143,8 @@ GLvoid affichage() {
 // Définition de la fonction gérant les interruptions clavier
 GLvoid clavier(unsigned char touche, int x, int y) 
 {
-    if (touche == 13)
-    {
-        exportation(windowW,windowH);
-    }
+
+        
     if (writing)
     {
        
@@ -264,6 +262,9 @@ GLvoid souris(int bouton, int etat, int x, int y) {
         }
         if (ico_funcs[2].est_sur(x, y)) { //option CLEAR
             stockage.clear();
+        }
+        if (ico_funcs[3].est_sur(x, y)) { //option Export
+            exportation(windowW, windowH);
         }
     }
 

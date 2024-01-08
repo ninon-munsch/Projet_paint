@@ -47,7 +47,7 @@ bool testcoul(int x, int y, int height, couleur test)
 	return (coul.r == test.r && coul.g == test.g && coul.b == test.b);
 }
 
-GLvoid remplissage(int x, int y, couleur cd, couleur cb, int width, int height, vector<point>& clicks, vector<Forme>& stockage)
+GLvoid remplissage(int x, int y, couleur cd, couleur cb, int width, int height, vector<point>& clicks, vector<Element*>& stockage)
 {
 	vector<point> aPeindre;
 	aPeindre.push_back(npoint(x, y));
@@ -109,7 +109,7 @@ GLvoid remplissage(int x, int y, couleur cd, couleur cb, int width, int height, 
 
 				//clicks.clear();
 				clicks.push_back(npoint(temp.x - distg, temp.y));
-				stockage.push_back(Forme(0, 0, clicks));
+				stockage.push_back(new Forme(0, 0, clicks));
 				clicks.clear();
 				//clicks.push_back(temp);
 				//clicks[0].c = cd;
