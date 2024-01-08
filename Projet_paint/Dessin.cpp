@@ -64,20 +64,20 @@ GLvoid remplissage(int x, int y, couleur cd, couleur cb, int width, int height, 
 		{
 		
 		
-			if (testcoul(temp.x,temp.y,height,cb))
+			if (testcoul(temp.x,temp.y+1,height,cb))
 			{
 
-				while (testcoul(temp.x-distg, temp.y, height, cb) && temp.x-distg > 0 )
+				while (testcoul(temp.x-distg, temp.y + 1, height, cb) && temp.x-distg > 0 )
 				{
 					/*clicks.push_back(npoint(temp.x - distg, temp.y));
 					clicks[0].c = cd;
 					stockage.push_back(Forme(0, 1, clicks));
 					clicks.clear();*/
-					if (testcoul(temp.x - distg, temp.y - 1, height, cb))
+					if (testcoul(temp.x - distg, temp.y , height, cb) && temp.y - 1 > 111)
 					{
-						//aPeindre.push_back(npoint(temp.x - distg, temp.y - 1));
+						aPeindre.push_back(npoint(temp.x - distg, temp.y - 1));
 					}
-					if (testcoul(temp.x - distg, temp.y + 1, height, cb) )
+					if (testcoul(temp.x - distg, temp.y + 2, height, cb) && temp.y + 1 < height)
 					{
 						aPeindre.push_back(npoint(temp.x - distg, temp.y + 1));
 					}
@@ -85,17 +85,17 @@ GLvoid remplissage(int x, int y, couleur cd, couleur cb, int width, int height, 
 					distg++;
 
 				}
-				while (testcoul(temp.x+ distd, temp.y, height, cb) && temp.x + distd < width)
+				while (testcoul(temp.x+ distd, temp.y + 1, height, cb) && temp.x + distd < width)
 				{
 					/*clicks.push_back(npoint(temp.x + distd, temp.y));
 					clicks[0].c = cd;
 					stockage.push_back(Forme(0, 1, clicks));
 					clicks.clear()*/
-					if (testcoul(temp.x + distd, temp.y - 1, height, cb))
+					if (testcoul(temp.x + distd, temp.y , height, cb)&& temp.y-1>111)
 					{
-						//aPeindre.push_back(npoint(temp.x + distd, temp.y - 1));
+						aPeindre.push_back(npoint(temp.x + distd, temp.y - 1));
 					}
-					if (testcoul(temp.x + distd, temp.y+1, height, cb) )
+					if (testcoul(temp.x + distd, temp.y+2, height, cb) && temp.y + 1<height)
 					{
 						aPeindre.push_back(npoint(temp.x + distd, temp.y + 1));
 					}
@@ -115,15 +115,16 @@ GLvoid remplissage(int x, int y, couleur cd, couleur cb, int width, int height, 
 				//clicks[0].c = cd;
 				//stockage.push_back(Forme(0, 1, clicks));
 				//clicks.clear();
-				distd = 1;
-				distg = 1;
-				//aPeindre.push_back(npoint(temp.x, temp.y - 1));
-				aPeindre.push_back(npoint(temp.x, temp.y + 1));
+				distd = 0;
+				distg = 0;
+			//aPeindre.push_back(npoint(temp.x, temp.y - 1));
+				//aPeindre.push_back(npoint(temp.x, temp.y +1));
 				
-				
+				affichage();
 			}
+			
 		}
-		affichage();
+		
 	}
 	return;
 }
