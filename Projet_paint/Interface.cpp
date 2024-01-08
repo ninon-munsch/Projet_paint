@@ -411,14 +411,17 @@ couleur pipetteMarie(int x,int y)
 
 GLvoid exportation(int width, int height)
 {
-	
+	char* path;
+	string chemin;
+	cout << "Entrez : Chemin/NomDuFichier.png" << endl;
+	cin >> chemin;
 	int stride = 3 * width;
 	int bufferSize = stride * height;
 	std::vector<char> buffer(bufferSize);
 	glPixelStorei(GL_PACK_ALIGNMENT, 4);
 	glReadBuffer(GL_FRONT);
-	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+	glReadPixels(0, 0, width, height-110, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
 	stbi_flip_vertically_on_write(true);
-	stbi_write_png("C:/Users/benja/Desktop/test.png", width, height, 3, buffer.data(), stride);
+	stbi_write_png(chemin.c_str(), width, height, 3, buffer.data(), stride);
 	return;
 }
