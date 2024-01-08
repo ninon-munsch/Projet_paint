@@ -153,12 +153,17 @@
     <ClCompile Include="texte.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\Dev\stb-master\stb_image.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\Dev\stb-master\stb_image_write.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="Dessin.h" />
     <ClInclude Include="Forme.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Stockage.h" />
     <ClInclude Include="texte.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\Pipette.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
